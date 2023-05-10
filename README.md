@@ -5,3 +5,6 @@ The vue-front directory houses the frontend of the application, which is built u
 
 ## 2. SpringBoot-back
 The SpringBoot-back directory contains the backend of the application, which is built using the Spring Boot framework.
+
+## 3. database
+need to design
