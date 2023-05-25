@@ -42,18 +42,21 @@ public class UserController {
 
     @PostMapping("/login")
     public Result<Map<String, Object>> login(@RequestBody User user) {
+//        System.out.println("已经调用login()");
         Map<String, Object> data = userService.login(user);
         if(data != null){
+            System.out.println("登录成功");
             return Result.success(data);
         }
         return Result.fail(20002, "用户名或密码错误");
     }
 
-    @PostMapping("/register")
+//    @PostMapping("/register")
 
     @GetMapping("/info")
     public Result<Map<String, Object>> getUserInfo(@RequestParam("token") String token) {
         // 根据token获取用户信息，redis
+//        System.out.println("前端传来的token：" + token);
         Map<String, Object> data = userService.getUserInfo(token);
         if(data != null){
             return Result.success(data);
