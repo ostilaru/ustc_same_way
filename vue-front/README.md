@@ -31,7 +31,7 @@ This will automatically open http://localhost:9528
 ## Build
 
 ```bash
-# build for courese environment
+# build for course environment
 npm run build:stage
 
 # build for production environment
