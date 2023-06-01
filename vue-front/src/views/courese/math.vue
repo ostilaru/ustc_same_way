@@ -1,6 +1,6 @@
 <template>
   <div>
-    功能点3
+    数学院开课情况
   </div>
 </template>
 

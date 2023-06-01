@@ -1,11 +1,14 @@
-const chokidar = require('chokidar')
-const bodyParser = require('body-parser')
-const chalk = require('chalk')
-const path = require('path')
-const Mock = require('mockjs')
+// 这段代码是用来启动mock服务的，mock服务的作用是在开发环境下，模拟后端接口，以便前端开发人员可以独立于后端进行开发。
 
-const mockDir = path.join(process.cwd(), 'mock')
+const chokidar = require('chokidar') // 监听文件变化
+const bodyParser = require('body-parser') // 解析请求体
+const chalk = require('chalk') // 终端样式
+const path = require('path') // 处理文件路径的模块
+const Mock = require('mockjs') // 生成随机数据
 
+const mockDir = path.join(process.cwd(), 'mock') // 定义了一个变量 mockDir，表示模拟数据的目录路径。process.cwd() 返回 Node.js 进程的当前工作目录，path.join() 用于拼接路径
+
+// 用于注册模拟数据的路由
 function registerRoutes(app) {
   let mockLastIndex
   const { mocks } = require('./index.js')
@@ -23,6 +26,7 @@ function registerRoutes(app) {
   }
 }
 
+// 注销模拟数据的路由
 function unregisterRoutes() {
   Object.keys(require.cache).forEach(i => {
     if (i.includes(mockDir)) {

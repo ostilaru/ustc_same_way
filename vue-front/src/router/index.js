@@ -60,48 +60,79 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/sys/user',
     name: 'sysManage',
-    meta: { title: '系统管理', icon: 'sys2' },
+    meta: { title: '人员信息管理', icon: 'sys2' },
     children: [
       {
         path: 'user',
         name: 'user',
         component: () => import('@/views/sys/user'),
-        meta: { title: '用户管理', icon: 'user' }
+        meta: { title: '教务管理员', icon: 'user' }
       },
       {
-        path: 'role',
-        name: 'role',
-        component: () => import('@/views/sys/role'),
-        meta: { title: '角色管理', icon: 'role' }
+        path: 'teacher',
+        name: 'teacher',
+        component: () => import('@/views/sys/teacher.vue'),
+        meta: { title: '院系老师', icon: 'role' }
+      },
+      {
+        path: 'student',
+        name: 'student',
+        component: () => import('@/views/sys/student.vue'),
+        meta: { title: '在校学生', icon: 'role' }
       }
     ]
   },
 
   {
-    path: '/test',
+    path: '/courese',
     component: Layout,
-    redirect: '/test/test1',
-    name: 'test',
-    meta: { title: '测试模块', icon: 'test' },
+    redirect: '/courese/test1',
+    name: 'courese',
+    meta: { title: '全校开课情况', icon: 'test' },
     children: [
       {
-        path: 'test1',
-        name: 'test1',
-        component: () => import('@/views/test/test1'),
-        meta: { title: '功能点1', icon: 'debug' }
+        path: 'cs',
+        name: 'cs',
+        component: () => import('@/views/courese/cs.vue'),
+        meta: { title: '计算机学院', icon: 'debug' }
       },
       {
-        path: 'test2',
-        name: 'test2',
-        component: () => import('@/views/test/test2'),
-        meta: { title: '功能点2', icon: 'debug' }
+        path: 'math',
+        name: 'math',
+        component: () => import('@/views/courese/math.vue'),
+        meta: { title: '数学院', icon: 'debug' }
       },
       {
-        path: 'test3',
-        name: 'test3',
-        component: () => import('@/views/test/test3'),
-        meta: { title: '功能点3', icon: 'debug' }
+        path: 'medical',
+        name: 'medical',
+        component: () => import('@/views/courese/medical.vue'),
+        meta: { title: '医学院', icon: 'debug' }
       },
+      {
+        path: 'music',
+        name: 'music',
+        component: () => import('@/views/courese/music.vue'),
+        meta: { title: '音乐学院', icon: 'debug' }
+      },
+      {
+        path: 'physcis',
+        name: 'physcis',
+        component: () => import('@/views/courese/physcis.vue'),
+        meta: { title: '物理学院', icon: 'debug' }
+      }
+    ]
+  },
+
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: 'health',
+        name: 'health',
+        component: () => import('@/views/health/index'),
+        meta: { title: '学生体检情况', icon: 'sys' }
+      }
     ]
   },
 
@@ -113,7 +144,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: '表单模版', icon: 'sys' }
       }
     ]
   },

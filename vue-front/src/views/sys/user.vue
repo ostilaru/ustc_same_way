@@ -1,6 +1,5 @@
 <template>
   <div>
-    用户管理
     <!-- 搜索栏 -->
     <el-card id="search">
 
