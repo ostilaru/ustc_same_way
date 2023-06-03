@@ -12,7 +12,7 @@ export default {
         phone: searchModel.phone,
         email: searchModel.email
       }
-    });
+    })
   },
 
   addUser(user){

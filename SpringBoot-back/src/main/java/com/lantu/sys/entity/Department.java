@@ -1,5 +1,7 @@
 package com.lantu.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,7 @@ public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "department_id")
     private Integer departmentId;
 
     private String departmentName;

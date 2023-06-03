@@ -1,5 +1,7 @@
 package com.lantu.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 /**
@@ -16,6 +18,7 @@ public class Score implements Serializable {
 
     private Integer courseId;
 
+    @TableId(value = "student_id")
     private String studentId;
 
     private Integer score;

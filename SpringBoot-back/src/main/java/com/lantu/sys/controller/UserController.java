@@ -71,6 +71,7 @@ public class UserController {
         return Result.success();
     }
 
+    // 分页查询
     @GetMapping("/list")
     public Result<Map<String, Object>> getUserList(@RequestParam(value = "username", required = false) String username,
                                                @RequestParam(value = "phone",required = false) String phone,

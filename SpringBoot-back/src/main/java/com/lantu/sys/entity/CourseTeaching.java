@@ -1,5 +1,7 @@
 package com.lantu.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 /**
@@ -16,6 +18,7 @@ public class CourseTeaching implements Serializable {
 
     private Integer courseId;
 
+    @TableId(value = "teacher_id")
     private String teacherId;
 
     public Integer getCourseId() {

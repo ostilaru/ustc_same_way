@@ -1,5 +1,7 @@
 package com.lantu.sys.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,7 @@ public class Teacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "teacher_id")
     private String teacherId;
 
     private String teacherName;
