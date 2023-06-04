@@ -15,14 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author woowoo
- * @since 2023-06-03
- */
+
 @RestController
 @RequestMapping("/physicalExam")
 public class PhysicalExamController {
