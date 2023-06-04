@@ -117,7 +117,7 @@
     <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
       <el-form :model="studentForm" ref="studentFormRef" :rules="rules">
         <el-form-item label="学号" prop="studentId" :label-width="formLabelWidth" >
-          <el-input v-model="studentForm.studentId" autocomplete="off" :disabled="flag"></el-input>
+          <el-input v-model="studentForm.studentId" autocomplete="off" @change="updateClassId" :disabled="flag" placeholder="PBxxxxxxxxx"></el-input>
         </el-form-item>
         <el-form-item label="姓名" prop="name" :label-width="formLabelWidth">
           <el-input v-model="studentForm.name" autocomplete="off"></el-input>
@@ -143,16 +143,23 @@
           </el-select>
         </el-form-item>
         <el-form-item label="班级号" prop="classId" :label-width="formLabelWidth">
-          <el-input v-model="studentForm.classId" autocomplete="off"></el-input>
+          <el-input v-model="studentForm.classId" autocomplete="off" placeholder="PB后的6位数字为班级号"></el-input>
         </el-form-item>
         <el-form-item label="注册时间" prop="enrollmentDate" :label-width="formLabelWidth">
-          <el-input v-model="studentForm.enrollmentDate" autocomplete="off" :disabled="flag"></el-input>
+          <el-date-picker
+            v-model="studentForm.graduationDate"
+            type="date"
+            placeholder="选择日期"
+            :disabled="flag"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="毕业时间" prop="graduationDate" :label-width="formLabelWidth">
           <el-date-picker
             v-model="studentForm.graduationDate"
             type="date"
-            placeholder="选择日期">
+            placeholder="选择日期"
+            value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="联系电话" prop="contactPhone" :label-width="formLabelWidth">
@@ -185,7 +192,7 @@
 
 <script>
 import stuApi from '@/api/studentManage'
-import userApi from "@/api/userManage";
+
 export default {
   data() {
     var checkEmail = (rule, value, callback) => {
@@ -234,19 +241,19 @@ export default {
       }],
       options2: [{
         value: '1',
-        label: '1'
+        label: '1（数学院）'
       }, {
         value: '2',
-        label: '2'
+        label: '2（物理学院）'
       }, {
         value: '3',
-        label: '3'
+        label: '3（医学院）'
       }, {
         value: '4',
-        label: '4'
+        label: '4（计算机学院）'
       }, {
         value: '5',
-        label: '5'
+        label: '5（音乐学院）'
       }],
 
       rules:{
@@ -324,6 +331,11 @@ export default {
       };
       this.$refs.studentFormRef.clearValidate();
     },
+    updateClassId() {
+      if(this.studentForm.studentId.length === 11){
+        this.studentForm.classId = this.studentForm.studentId.substring(2,8);
+      }
+    },
 
     saveStudent(){
       // 先触发表单验证
@@ -366,7 +378,8 @@ export default {
           message: '已取消开除'
         });
       });
-    }
+    },
+
   },
 
 
