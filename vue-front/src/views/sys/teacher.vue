@@ -79,7 +79,7 @@
           label="操作"
           width="150">
           <template slot-scope="scope">
-            <el-button @click="openEditUI(scope.row.studentId)" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
+            <el-button @click="openEditUI(scope.row.teacherId)" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
             <el-button @click="deleteTeacher(scope.row)" type="danger" size="mini" icon="el-icon-delete" circle></el-button>
           </template>
         </el-table-column>
@@ -101,7 +101,7 @@
     <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
       <el-form :model="teacherForm" ref="teacherFormRef" :rules="rules">
         <el-form-item label="工号" prop="teacherId" :label-width="formLabelWidth" >
-          <el-input v-model="teacherForm.studentId" autocomplete="off" :disabled="flag" placeholder="TExxxx"></el-input>
+          <el-input v-model="teacherForm.teacherId" autocomplete="off" :disabled="flag" placeholder="TExxxx"></el-input>
         </el-form-item>
         <el-form-item label="姓名" prop="teacherName" :label-width="formLabelWidth">
           <el-input v-model="teacherForm.teacherName" autocomplete="off"></el-input>
@@ -155,7 +155,6 @@
 
 <script>
 import teacherApi from '@/api/teacherManage'
-import stuApi from "@/api/studentManage";
 
 export default {
   data() {
@@ -186,6 +185,7 @@ export default {
         departmentId: '',
         contactPhone: '',
         contactMail: '',
+        status: ''
       },
       title: '',
       flag: false,
@@ -240,15 +240,15 @@ export default {
   methods: {
     handleSizeChange(pageSize) {
       this.searchModel.pageSize = pageSize
-      this.getStudentList()
+      this.getTeacherList()
     },
     handleCurrentChange(pageNo) {
       this.searchModel.pageNo = pageNo
-      this.getStudentList()
+      this.getTeacherList()
     },
     getTeacherList() {
       teacherApi.getTeacherList(this.searchModel).then(res => {
-        this.teacherList = res.data.list
+        this.teacherList = res.data.rows
         this.total = res.data.total
       })
     },
@@ -259,7 +259,7 @@ export default {
       }else{
         this.flag = true;
         this.title = "修改教师";
-        // 根据student_id查询用户信息
+        // 根据teacher_id查询用户信息
         teacherApi.getTeacherById(teacher_id).then(res => {
           this.teacherForm = res.data;
         });
@@ -295,7 +295,7 @@ export default {
       this.$refs.teacherFormRef.validate((valid) => {
         if (valid) {
           // 提交请求给后台
-          teacherApi.saveTeacher(this.studentForm, this.title).then(response => {
+          teacherApi.saveTeacher(this.teacherForm, this.title).then(response => {
             // 给出成功提示
             this.$message({
               message: response.message,
@@ -341,5 +341,10 @@ export default {
 </script>
 
 <style>
+#search .el-input {
+  width: 140px !important;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
 
 </style>

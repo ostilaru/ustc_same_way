@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lantu.common.vo.Result;
 import com.lantu.sys.entity.PhysicalExam;
-import com.lantu.sys.entity.Student;
 import com.lantu.sys.service.IPhysicalExamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author woowoo
- * @since 2023-06-03
- */
+
 @RestController
 @RequestMapping("/physicalExam")
 public class PhysicalExamController {

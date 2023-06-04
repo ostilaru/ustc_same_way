@@ -13,7 +13,7 @@ export default {
         gender: searchModel.gender,
         department_id: searchModel.department_id,
         contact_phone: searchModel.contact_phone,
-        contact_email: searchModel.contact_email
+        contact_email: searchModel.contact_mail
       }
     });
   },

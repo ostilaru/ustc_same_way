@@ -75,9 +75,9 @@ public class TeacherController {
     }
 
     @DeleteMapping("/{teacher_id}")
-    public Result<?> deleteStudentById(@PathVariable("teacher_id") String teacherId) {
+    public Result<?> deleteTeacherById(@PathVariable("teacher_id") String teacherId) {
         teacherService.removeById(teacherId);
-        return Result.success("删除成功");
+        return Result.success("辞退成功");
     }
 
     @PutMapping
