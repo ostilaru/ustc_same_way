@@ -3,8 +3,8 @@ server:
 
 spring:
   datasource:
-      username: root
-      password: jl20020426
+      username: mazhenpeng
+      password: MYSQL.mima1
       url: jdbc:mysql://localhost:3306/school
 
 #    two:
@@ -13,9 +13,9 @@ spring:
 #      password: jl20020426
 #      url: jdbc:mysql://localhost:3306/school
 
-  redis:
-    port: 6379
-    host: localhost
+#  redis:
+#    port: 6379
+#    host: localhost
 
 logging:
   level:
