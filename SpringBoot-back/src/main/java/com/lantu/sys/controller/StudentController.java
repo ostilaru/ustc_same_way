@@ -79,7 +79,7 @@ public class StudentController {
         studentService.save(student);
         // 处理体检信息
 
-        return Result.success("添加成功");
+        return Result.success("添加学生成功");
     }
 
     @DeleteMapping("/{student_id}")

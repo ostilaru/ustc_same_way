@@ -42,8 +42,8 @@ export default {
     });
   },
 
-  saveStudent(student) {
-    if(student.studentId == null || student.studentId == 'defined'){
+  saveStudent(student, title) {
+    if(title === '新增学生'){
       return this.addStudent(student);
     }else{
       return this.updateStudent(student);

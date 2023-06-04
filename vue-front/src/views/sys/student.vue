@@ -96,7 +96,7 @@
             width="100">
             <template slot-scope="scope">
               <el-button @click="openEditUI(scope.row.studentId)" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
-              <el-button @click="" type="danger" size="mini" icon="el-icon-delete" circle></el-button>
+              <el-button @click="deleteStudent(scope.row)" type="danger" size="mini" icon="el-icon-delete" circle></el-button>
             </template>
           </el-table-column>
       </el-table>
@@ -162,15 +162,15 @@
           <el-input v-model="studentForm.contactMail" autocomplete="off"></el-input>
         </el-form-item>
 
-<!--        <el-form-item label="在校状态" :label-width="formLabelWidth">-->
-<!--          <el-switch-->
-<!--            v-model="studentForm.status"-->
-<!--            :active-value="1"-->
-<!--            :inactive-value="0"-->
-<!--            active-color="#13ce66"-->
-<!--          >-->
-<!--          </el-switch>-->
-<!--        </el-form-item>-->
+        <el-form-item label="在校状态" :label-width="formLabelWidth">
+          <el-switch
+            v-model="studentForm.status"
+            :active-value="'在校'"
+            :inactive-value="'休学'"
+            active-color="#13ce66"
+          >
+          </el-switch>
+        </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -219,6 +219,7 @@ export default {
         graduationDate: '',
         contactPhone: '',
         contactMail: '',
+        status: ''
       },
       title: '',
       flag: false,
@@ -329,7 +330,7 @@ export default {
       this.$refs.studentFormRef.validate((valid) => {
         if (valid) {
           // 提交请求给后台
-          stuApi.saveStudent(this.studentForm).then(response => {
+          stuApi.saveStudent(this.studentForm, this.title).then(response => {
             // 给出成功提示
             this.$message({
               message: response.message,
@@ -347,6 +348,25 @@ export default {
       });
       // 提交请求给后台
     },
+
+    deleteStudent(student) {
+      this.$confirm('确认要开除学生' + student.name + '吗?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        stuApi.deleteStudentById(student.studentId).then(response => {
+          this.$message({
+            message: response.message,
+            type: 'success'
+          });
+          this.getStudentList();
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消开除'
+        });
+      });
+    }
   },
 
 
