@@ -67,7 +67,7 @@ public class PhysicalExamController {
     public Result<?> addStudent(@RequestBody PhysicalExam physicalExam) {
         physicalExamService.save(physicalExam);
 
-        return Result.success("添加学生成功");
+        return Result.success("添加体检记录成功");
     }
 
     @DeleteMapping("/{student_id}")
@@ -75,7 +75,7 @@ public class PhysicalExamController {
         physicalExamService.removeById(studentId);
         // 处理体检信息
 
-        return Result.success("删除成功");
+        return Result.success("删除体检记录成功");
     }
 
     @PutMapping
@@ -83,7 +83,7 @@ public class PhysicalExamController {
         physicalExamService.updateById(physicalExam);
         // 处理体检信息
 
-        return Result.success("修改成功");
+        return Result.success("修改体检记录成功");
     }
 
     @GetMapping("/{student_id}")
