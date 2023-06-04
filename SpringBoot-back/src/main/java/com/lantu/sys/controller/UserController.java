@@ -80,9 +80,9 @@ public class UserController {
                                                    @RequestParam(value = "pageSize") Long pageSize){
         // 需要传入条件构造器
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StringUtils.hasLength(username), User::getUsername, username);
-        queryWrapper.eq(StringUtils.hasLength(phone), User::getPhone, phone);
-        queryWrapper.eq(StringUtils.hasLength(email), User::getEmail, email);
+        queryWrapper.like(StringUtils.hasLength(username), User::getUsername, username);
+        queryWrapper.like(StringUtils.hasLength(phone), User::getPhone, phone);
+        queryWrapper.like(StringUtils.hasLength(email), User::getEmail, email);
         queryWrapper.orderByDesc(User::getId);
 
         Page<User> page = new Page<>(pageNo, pageSize);

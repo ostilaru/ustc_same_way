@@ -10,6 +10,7 @@ export default {
         pageSize: searchModel.pageSize,
         student_id: searchModel.student_id,
         name: searchModel.name,
+        gender: searchModel.gender,
         department_id: searchModel.department_id,
         class_id: searchModel.class_id,
         contact_phone: searchModel.contact_phone,
@@ -18,5 +19,42 @@ export default {
     })
   },
 
+  getStudentById(student_id) {
+    return request({
+      url: `/student/${student_id}`,
+      method: 'get'
+    });
+  },
+
+  addStudent(student) {
+    return request({
+      url: '/student',
+      method: 'post',
+      data: student
+    });
+  },
+
+  updateStudent(student) {
+    return request({
+      url: '/student',
+      method: 'put',
+      data: student
+    });
+  },
+
+  saveStudent(student) {
+    if(student.studentId == null || student.studentId == 'defined'){
+      return this.addStudent(student);
+    }else{
+      return this.updateStudent(student);
+    }
+  },
+
+  deleteStudentById(student_id) {
+    return request({
+      url: `/student/${student_id}`,
+      method: 'delete'
+    });
+  }
 
 }

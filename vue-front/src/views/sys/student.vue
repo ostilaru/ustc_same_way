@@ -9,6 +9,7 @@
         <el-col :span="22">
           <el-input v-model="searchModel.student_id" placeholder="学号" clearable></el-input>
           <el-input v-model="searchModel.name" placeholder="姓名" clearable></el-input>
+          <el-input v-model="searchModel.gender" placeholder="姓别" clearable></el-input>
           <el-input v-model="searchModel.department_id" placeholder="院系号" clearable></el-input>
           <el-input v-model="searchModel.class_id" placeholder="班级号" clearable></el-input>
           <el-input v-model="searchModel.contact_phone" placeholder="电话" clearable></el-input>
@@ -17,7 +18,7 @@
         </el-col>
 
         <el-col :span="2" align="right">
-          <el-button @click="" type="primary" icon="el-icon-plus" round>新增</el-button>
+          <el-button @click="openEditUI(null)" type="primary" icon="el-icon-plus" round>新增</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -94,7 +95,7 @@
             label="操作"
             width="100">
             <template slot-scope="scope">
-              <el-button @click="" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
+              <el-button @click="openEditUI(scope.row.studentId)" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
               <el-button @click="" type="danger" size="mini" icon="el-icon-delete" circle></el-button>
             </template>
           </el-table-column>
@@ -112,18 +113,93 @@
       :total="total">
     </el-pagination>
 
+    <!-- 用户信息编辑对话框 -->
+    <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
+      <el-form :model="studentForm" ref="studentFormRef" :rules="rules">
+        <el-form-item label="学号" prop="studentId" :label-width="formLabelWidth" >
+          <el-input v-model="studentForm.studentId" autocomplete="off" :disabled="flag"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="name" :label-width="formLabelWidth">
+          <el-input v-model="studentForm.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="姓别" prop="gender" :label-width="formLabelWidth">
+          <el-select v-model="studentForm.gender" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="院系号" prop="departmentId" :label-width="formLabelWidth">
+          <el-select v-model="studentForm.departmentId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="班级号" prop="classId" :label-width="formLabelWidth">
+          <el-input v-model="studentForm.classId" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="注册时间" prop="enrollmentDate" :label-width="formLabelWidth">
+          <el-input v-model="studentForm.enrollmentDate" autocomplete="off" :disabled="flag"></el-input>
+        </el-form-item>
+        <el-form-item label="毕业时间" prop="graduationDate" :label-width="formLabelWidth">
+          <el-date-picker
+            v-model="studentForm.graduationDate"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="contactPhone" :label-width="formLabelWidth">
+          <el-input v-model="studentForm.contactPhone" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系邮箱" prop="contactMail" :label-width="formLabelWidth">
+          <el-input v-model="studentForm.contactMail" autocomplete="off"></el-input>
+        </el-form-item>
+
+<!--        <el-form-item label="在校状态" :label-width="formLabelWidth">-->
+<!--          <el-switch-->
+<!--            v-model="studentForm.status"-->
+<!--            :active-value="1"-->
+<!--            :inactive-value="0"-->
+<!--            active-color="#13ce66"-->
+<!--          >-->
+<!--          </el-switch>-->
+<!--        </el-form-item>-->
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveStudent">确 定</el-button>
+      </div>
+    </el-dialog>
+
     </div>
 
 </template>
 
 <script>
 import stuApi from '@/api/studentManage'
+import userApi from "@/api/userManage";
 export default {
   data() {
+    var checkEmail = (rule, value, callback) => {
+      var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+      if(!reg.test(value)){
+        return callback(new Error('邮箱格式错误'));
+      }
+      callback();
+    };
     return {
       searchModel: {
         student_id: '',
         name: '',
+        gender: '',
         department_id: '',
         class_id: '',
         contact_phone: '',
@@ -132,7 +208,64 @@ export default {
         pageSize: 10
       },
       studentList: [],
-      total: 0
+      total: 0,
+      studentForm: {
+        studentId: '',
+        name: '',
+        gender: '',
+        departmentId: '',
+        classId: '',
+        enrollmentDate: '',
+        graduationDate: '',
+        contactPhone: '',
+        contactMail: '',
+      },
+      title: '',
+      flag: false,
+      formLabelWidth:'130px',
+      dialogFormVisible: false,
+      options1: [{
+        value: '男',
+        label: '男'
+      }, {
+        value: '女',
+        label: '女'
+      }],
+      options2: [{
+        value: '1',
+        label: '1'
+      }, {
+        value: '2',
+        label: '2'
+      }, {
+        value: '3',
+        label: '3'
+      }, {
+        value: '4',
+        label: '4'
+      }, {
+        value: '5',
+        label: '5'
+      }],
+
+      rules:{
+        studentId: [
+          { required: true, message: '请输入学号', trigger: 'blur' },
+          { min: 11, max: 11, message: '长度在 11 个字符', trigger: 'blur' }
+        ],
+        name: [
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+          { min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur' }
+        ],
+        contactPhone: [
+          { required: true, message: '请输入联系电话', trigger: 'blur' },
+          { min: 11, max: 11, message: '长度为11个字符', trigger: 'blur' }
+        ],
+        contactMail: [
+          { required: true, message: '请输入电子邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur'}
+        ]
+      }
 
     }
   },
@@ -146,14 +279,76 @@ export default {
       this.searchModel.pageNo = pageNo
       this.getStudentList()
     },
-
     getStudentList() {
       stuApi.getStudentList(this.searchModel).then(res => {
         this.studentList = res.data.rows
         this.total = res.data.total
       })
-    }
+    },
+    openEditUI(student_id) {
+      if(student_id == null){
+        this.flag = false;
+        this.title = "新增学生";
+      }else{
+        this.flag = true;
+        this.title = "修改学生";
+        console.log(student_id);
+        // 根据student_id查询用户信息
+        stuApi.getStudentById(student_id).then(res => {
+          this.studentForm = res.data;
+        });
+      }
+
+      this.dialogFormVisible = true;
+    },
+    clearValidate(props = []) {
+      const fields = props.length
+        ? (typeof props === 'string'
+            ? this.fields.filter(field => props === field.prop)
+            : this.fields.filter(field => props.indexOf(field.prop) > -1)
+        ) : this.fields;
+      fields.forEach(field => {
+        field.clearValidate();
+      });
+    },
+    clearForm() {
+      this.studentForm = {
+        student_id: '',
+        name: '',
+        gender: '',
+        department_id: '',
+        class_id: '',
+        contact_phone: '',
+        contact_email: '',
+      };
+      this.$refs.studentFormRef.clearValidate();
+    },
+
+    saveStudent(){
+      // 先触发表单验证
+      this.$refs.studentFormRef.validate((valid) => {
+        if (valid) {
+          // 提交请求给后台
+          stuApi.saveStudent(this.studentForm).then(response => {
+            // 给出成功提示
+            this.$message({
+              message: response.message,
+              type: 'success'
+            });
+            // 关闭对话框
+            this.dialogFormVisible = false;
+            // 刷新表格
+            this.getStudentList();
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+      // 提交请求给后台
+    },
   },
+
 
   created() {
     this.getStudentList()
@@ -163,8 +358,8 @@ export default {
 </script>
 
 <style>
-.el-input {
-  width: 148px !important;
+#search .el-input {
+  width: 125px !important;
   margin-right: 10px;
   margin-bottom: 5px;
 }

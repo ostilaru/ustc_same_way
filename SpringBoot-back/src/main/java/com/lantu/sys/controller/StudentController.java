@@ -4,15 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lantu.common.vo.Result;
 import com.lantu.sys.entity.Student;
+import com.lantu.sys.service.IPhysicalExamService;
 import com.lantu.sys.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +32,7 @@ public class StudentController {
     private IStudentService studentService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private IPhysicalExamService physicalExamService;
 
     @GetMapping("/all")
     public Result<List<Student>> getAllStudent() {
@@ -46,6 +44,7 @@ public class StudentController {
     @GetMapping("/list")
     public Result<Map<String, Object>> getStudentList(@RequestParam(value = "student_id", required = false) String studentId,
                                                       @RequestParam(value = "name", required = false) String studentName,
+                                                      @RequestParam(value = "gender", required = false) String gender,
                                                       @RequestParam(value = "department_id", required = false) String departmentId,
                                                       @RequestParam(value = "class_id", required = false) String classId,
                                                         @RequestParam(value = "contact_phone", required = false) String contactPhone,
@@ -54,12 +53,13 @@ public class StudentController {
                                                         @RequestParam(value = "pageSize") Long pageSize) {
         // 需要传入条件构造器
         LambdaQueryWrapper<Student> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StringUtils.hasLength(studentId), Student::getStudentId, studentId);
-        queryWrapper.eq(StringUtils.hasLength(studentName), Student::getName, studentName);
+        queryWrapper.like(StringUtils.hasLength(studentId), Student::getStudentId, studentId);
+        queryWrapper.like(StringUtils.hasLength(studentName), Student::getName, studentName);
+        queryWrapper.eq(StringUtils.hasLength(gender), Student::getGender, gender);
         queryWrapper.eq(StringUtils.hasLength(departmentId), Student::getDepartmentId, departmentId);
-        queryWrapper.eq(StringUtils.hasLength(classId), Student::getClassId, classId);
-        queryWrapper.eq(StringUtils.hasLength(contactPhone), Student::getContactPhone, contactPhone);
-        queryWrapper.eq(StringUtils.hasLength(contactEmail), Student::getContactMail, contactEmail);
+        queryWrapper.like(StringUtils.hasLength(classId), Student::getClassId, classId);
+        queryWrapper.like(StringUtils.hasLength(contactPhone), Student::getContactPhone, contactPhone);
+        queryWrapper.like(StringUtils.hasLength(contactEmail), Student::getContactMail, contactEmail);
         queryWrapper.orderByDesc(Student::getStudentId);
 
 
@@ -72,6 +72,36 @@ public class StudentController {
 
         return Result.success(data);
 
+    }
+
+    @PostMapping
+    public Result<?> addStudent(@RequestBody Student student) {
+        studentService.save(student);
+        // 处理体检信息
+
+        return Result.success("添加成功");
+    }
+
+    @DeleteMapping("/{student_id}")
+    public Result<?> deleteStudentById(@PathVariable("student_id") String studentId) {
+        studentService.removeById(studentId);
+        // 处理体检信息
+
+        return Result.success("开除成功");
+    }
+
+    @PutMapping
+    public Result<?> updateStudent(@RequestBody Student student) {
+        studentService.updateById(student);
+        // 处理体检信息
+
+        return Result.success("修改成功");
+    }
+
+    @GetMapping("/{student_id}")
+    public Result<Student> getStudentById(@PathVariable("student_id") String studentId) {
+        Student student = studentService.getById(studentId);
+        return Result.success(student);
     }
 
 }
