@@ -9,8 +9,22 @@
         <el-col :span="22">
           <el-input v-model="searchModel.student_id" placeholder="学号" clearable></el-input>
           <el-input v-model="searchModel.name" placeholder="姓名" clearable></el-input>
-          <el-input v-model="searchModel.gender" placeholder="姓别" clearable></el-input>
-          <el-input v-model="searchModel.department_id" placeholder="院系号" clearable></el-input>
+          <el-select v-model="searchModel.gender" clearable placeholder="性别">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select v-model="searchModel.department_id" clearable placeholder="院系">
+            <el-option
+              v-for="item in options2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
           <el-input v-model="searchModel.class_id" placeholder="班级号" clearable></el-input>
           <el-input v-model="searchModel.contact_phone" placeholder="电话" clearable></el-input>
           <el-input v-model="searchModel.contact_email" placeholder="邮箱" clearable></el-input>

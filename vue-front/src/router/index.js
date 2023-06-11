@@ -84,43 +84,48 @@ export const constantRoutes = [
   },
 
   {
-    path: '/course',
+    path: '/',
     component: Layout,
-    redirect: '/course/test1',
-    name: 'courese',
-    meta: { title: '全校开课情况', icon: 'test' },
     children: [
       {
-        path: 'cs',
-        name: 'cs',
-        component: () => import('@/views/course/cs.vue'),
-        meta: { title: '计算机学院', icon: 'debug' }
-      },
-      {
-        path: 'math',
-        name: 'math',
-        component: () => import('@/views/course/math.vue'),
-        meta: { title: '数学院', icon: 'debug' }
-      },
-      {
-        path: 'medical',
-        name: 'medical',
-        component: () => import('@/views/course/medical.vue'),
-        meta: { title: '医学院', icon: 'debug' }
-      },
-      {
-        path: 'music',
-        name: 'music',
-        component: () => import('@/views/course/music.vue'),
-        meta: { title: '音乐学院', icon: 'debug' }
-      },
-      {
-        path: 'physcis',
-        name: 'physcis',
-        component: () => import('@/views/course/physcis.vue'),
-        meta: { title: '物理学院', icon: 'debug' }
+        path: 'course',
+        name: 'course',
+        component: () => import('@/views/course/index.vue'),
+        meta: { title: '全校开课情况', icon: 'test' }
       }
     ]
+    // children: [
+    //   {
+    //     path: 'cs',
+    //     name: 'cs',
+    //     component: () => import('@/views/course/cs.vue'),
+    //     meta: { title: '计算机学院', icon: 'debug' }
+    //   },
+    //   {
+    //     path: 'math',
+    //     name: 'math',
+    //     component: () => import('@/views/course/math.vue'),
+    //     meta: { title: '数学院', icon: 'debug' }
+    //   },
+    //   {
+    //     path: 'medical',
+    //     name: 'medical',
+    //     component: () => import('@/views/course/medical.vue'),
+    //     meta: { title: '医学院', icon: 'debug' }
+    //   },
+    //   {
+    //     path: 'music',
+    //     name: 'music',
+    //     component: () => import('@/views/course/music.vue'),
+    //     meta: { title: '音乐学院', icon: 'debug' }
+    //   },
+    //   {
+    //     path: 'physcis',
+    //     name: 'physcis',
+    //     component: () => import('@/views/course/physcis.vue'),
+    //     meta: { title: '物理学院', icon: 'debug' }
+    //   }
+    // ]
   },
 
   {
