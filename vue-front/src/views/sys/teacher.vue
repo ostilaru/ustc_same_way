@@ -9,8 +9,22 @@
         <el-col :span="22">
           <el-input v-model="searchModel.teacher_id" placeholder="工号" clearable></el-input>
           <el-input v-model="searchModel.teacher_name" placeholder="姓名" clearable></el-input>
-          <el-input v-model="searchModel.gender" placeholder="姓别" clearable></el-input>
-          <el-input v-model="searchModel.department_id" placeholder="院系号" clearable></el-input>
+          <el-select v-model="searchModel.gender" clearable placeholder="性别">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select v-model="searchModel.department_id" clearable placeholder="院系">
+            <el-option
+              v-for="item in options2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
           <el-input v-model="searchModel.contact_phone" placeholder="电话" clearable></el-input>
           <el-input v-model="searchModel.contact_email" placeholder="邮箱" clearable></el-input>
           <el-button @click="getTeacherList" type="primary" round icon="el-icon-search">查询</el-button>
@@ -189,7 +203,7 @@ export default {
       },
       title: '',
       flag: false,
-      formLabelWidth:'130px',
+      formLabelWidth: '130px',
       dialogFormVisible: false,
       options1: [{
         value: '男',
