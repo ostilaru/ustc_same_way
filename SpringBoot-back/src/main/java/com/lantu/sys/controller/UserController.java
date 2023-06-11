@@ -68,7 +68,7 @@ public class UserController {
     public Result<?> logout(@RequestHeader("X-Token") String token) {
         // 根据token删除用户信息，redis
         userService.logout(token);
-        return Result.success();
+        return Result.success("退出成功");
     }
 
     // 分页查询

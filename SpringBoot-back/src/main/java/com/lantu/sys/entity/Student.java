@@ -15,7 +15,7 @@ import java.time.LocalDate;
  */
 public class Student implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static long serialVersionUID = 1L;
 
     @TableId(value = "student_id")
     private String studentId;
@@ -28,15 +28,32 @@ public class Student implements Serializable {
 
     private Integer classId;
 
-    private LocalDate enrollmentDate;
+    private String enrollmentDate;
 
-    private LocalDate graduationDate;
+    private String graduationDate;
 
     private String contactPhone;
 
     private String contactMail;
 
     private String status;
+
+    public Student() {
+    }
+
+    public Student(long serialVersionUID,  String studentId, String name, String gender, Integer departmentId, Integer classId, String enrollmentDate, String graduationDate, String contactPhone, String contactMail, String status) {
+        Student.serialVersionUID = serialVersionUID;
+        this.studentId = studentId;
+        this.name = name;
+        this.gender = gender;
+        this.departmentId = departmentId;
+        this.classId = classId;
+        this.enrollmentDate = enrollmentDate;
+        this.graduationDate = graduationDate;
+        this.contactPhone = contactPhone;
+        this.contactMail = contactMail;
+        this.status = status;
+    }
 
     public String getStudentId() {
         return studentId;
@@ -78,19 +95,19 @@ public class Student implements Serializable {
         this.classId = classId;
     }
 
-    public LocalDate getEnrollmentDate() {
+    public String getEnrollmentDate() {
         return enrollmentDate;
     }
 
-    public void setEnrollmentDate(LocalDate enrollmentDate) {
+    public void setEnrollmentDate(String enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
     }
 
-    public LocalDate getGraduationDate() {
+    public String getGraduationDate() {
         return graduationDate;
     }
 
-    public void setGraduationDate(LocalDate graduationDate) {
+    public void setGraduationDate(String graduationDate) {
         this.graduationDate = graduationDate;
     }
 
@@ -133,4 +150,5 @@ public class Student implements Serializable {
             ", status = " + status +
         "}";
     }
+
 }

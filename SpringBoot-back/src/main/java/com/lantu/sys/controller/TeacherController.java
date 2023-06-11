@@ -91,4 +91,31 @@ public class TeacherController {
         Teacher teacher = teacherService.getById(teacherId);
         return Result.success(teacher);
     }
+
+    @PostMapping("/login")
+    public Result<Map<String, Object>> login(@RequestBody Teacher tea) {
+        Map<String, Object> data = teacherService.teacherLogin(tea);
+
+        if(data != null) {
+            System.out.println("登录成功");
+            return Result.success(data);
+        }
+        return Result.fail(20002, "用户名或密码错误");
+    }
+
+    @GetMapping("/info")
+    public Result<Map<String, Object>> getTeacherInfo(@RequestParam("token") String token) {
+        Map<String, Object> data = teacherService.getTeacherInfo(token);
+        if(data != null) {
+            return Result.success(data);
+        }
+        return Result.fail(20003, "token无效");
+    }
+
+    @PostMapping("/logout")
+    public Result<?> logout(@RequestParam("token") String token) {
+        teacherService.logout(token);
+        return Result.success("退出成功");
+    }
+
 }
