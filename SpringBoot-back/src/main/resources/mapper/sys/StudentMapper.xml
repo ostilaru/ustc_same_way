@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lantu.sys.mapper.StudentMapper">
+    <resultMap id="scoreResultMap" type="com.lantu.sys.entity.MyScore">
+        <id property="studentId" column="student_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="score" column="score"/>
+        <result property="creditPoints" column="credit_points"/>
+        <result property="courseId" column="course_id"/>
+        <result property="studentName" column="student_name"/>
+    </resultMap>
+    <select id="getScoreByStudentId" resultMap="scoreResultMap">
+        SELECT
+            c.course_id,
+            c.course_name,
+            c.credit_points,
+            s.score,
+            cs.student_id,
+            st.name AS student_name
+        FROM
+            Course_Selection cs
+                JOIN Course c ON cs.course_id = c.course_id
+                JOIN Score s ON cs.course_id = s.course_id AND cs.student_id = s.student_id
+                JOIN Student st ON cs.student_id = st.student_id
+        WHERE
+            cs.student_id = #{studentId}
+    </select>
 
 </mapper>

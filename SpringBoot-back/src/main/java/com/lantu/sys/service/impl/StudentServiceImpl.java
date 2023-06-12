@@ -2,6 +2,7 @@ package com.lantu.sys.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lantu.sys.entity.MyScore;
 import com.lantu.sys.entity.Student;
 import com.lantu.sys.mapper.StudentMapper;
 import com.lantu.sys.service.IStudentService;
@@ -84,6 +85,17 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         System.out.println("正在调用student的logout方法");
         // 删除redis中的token
         redisTemplate.delete(token);
+    }
+
+    @Override
+    public Map<String, Object> getMyScoreById(String studentId) {
+        System.out.println("正在调用getMyScoreById方法");
+        // 根据学号查询成绩
+        List<MyScore> scoreList = this.baseMapper.getScoreByStudentId(studentId);
+        // 返回数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("scoreList", scoreList);
+        return data;
     }
 
 }

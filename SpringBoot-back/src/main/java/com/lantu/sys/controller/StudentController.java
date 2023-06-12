@@ -3,6 +3,7 @@ package com.lantu.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lantu.common.vo.Result;
+import com.lantu.sys.entity.MyScore;
 import com.lantu.sys.entity.Student;
 import com.lantu.sys.entity.User;
 import com.lantu.sys.service.IPhysicalExamService;
@@ -133,6 +134,21 @@ public class StudentController {
     public Result<?> logout(@RequestParam("token") String token) {
         studentService.logout(token);
         return Result.success("退出成功");
+    }
+
+    @GetMapping("/myscore")
+    public Result<Map<String, Object>> getMyScoreById(@RequestParam(value = "name") String studentId) {
+        Map<String, Object> data = studentService.getMyScoreById(studentId);
+
+//        Page<MyScore> page = new Page<>(Long.parseLong(pageNo), Long.parseLong(pageSize));
+//        studentService.page(page, data);
+
+        if (data != null) {
+            return Result.success(data);
+        }
+        return Result.fail(20004, "查询失败");
+
+
     }
 
 }

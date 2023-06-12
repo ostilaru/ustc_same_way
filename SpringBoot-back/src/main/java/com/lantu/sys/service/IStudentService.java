@@ -21,4 +21,6 @@ public interface IStudentService extends IService<Student> {
     Map<String, Object> getStudentInfo(String token);
 
     void logout(String token);
+
+    Map<String, Object> getMyScoreById(String studentId);
 }

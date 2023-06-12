@@ -22,4 +22,6 @@ public interface IUserService extends IService<User> {
     void logout(String token);
 
     User getUserByPhone(String phone);
+
+    String getRoleNameByUserId(Integer userId);
 }

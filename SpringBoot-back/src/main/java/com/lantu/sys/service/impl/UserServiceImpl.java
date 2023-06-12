@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -131,4 +130,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = this.baseMapper.selectOne(queryWrapper);
         return user;
     }
+
+    @Override
+    public String getRoleNameByUserId(Integer userId) {
+        return this.baseMapper.getRoleNameByUserId(userId).toString();
+    }
+
 }
