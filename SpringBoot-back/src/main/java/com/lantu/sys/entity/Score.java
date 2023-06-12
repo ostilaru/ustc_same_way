@@ -23,6 +23,8 @@ public class Score implements Serializable {
 
     private Integer score;
 
+
+
     public Integer getCourseId() {
         return courseId;
     }
@@ -47,12 +49,15 @@ public class Score implements Serializable {
         this.score = score;
     }
 
+
+
+
     @Override
     public String toString() {
         return "Score{" +
-            "courseId = " + courseId +
-            ", studentId = " + studentId +
-            ", score = " + score +
-        "}";
+                "courseId = " + courseId +
+                ", studentId = " + studentId +
+                ", score = " + score +
+                "}";
     }
 }

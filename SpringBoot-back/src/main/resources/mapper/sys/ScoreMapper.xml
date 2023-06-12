@@ -1,5 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lantu.sys.mapper.ScoreMapper">
+    <resultMap id="scoreResultMap" type="com.lantu.sys.entity.ScoreForAll">
+        <id property="studentId" column="student_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="score" column="score"/>
+        <result property="courseId" column="course_id"/>
+        <result property="studentName" column="student_name"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="teacherName" column="teacher_name"/>
+    </resultMap>
+
+    <select id="getScoreByStudentId" resultMap="scoreResultMap">
+        SELECT
+            cs.student_id,
+            c.course_name,
+            s.score,
+            c.course_id,
+            st.name AS student_name,
+            d.department_name,
+            t.teacher_name AS teacher_name
+        FROM
+            Course_Selection cs
+                JOIN Course c ON cs.course_id = c.course_id
+                JOIN Score s ON cs.course_id = s.course_id AND cs.student_id = s.student_id
+                JOIN Student st ON cs.student_id = st.student_id
+                JOIN department d ON st.department_id = d.department_id
+            JOIN teacher t on c.teacher_id = t.teacher_id
+        WHERE
+            cs.student_id LIKE CONCAT('%',#{studentId},'%')
+    </select>
+    <select id="getScoreByCourseId" resultType="com.lantu.sys.entity.ScoreForAll">
+        SELECT
+            cs.student_id,
+            c.course_name,
+            s.score,
+            c.course_id,
+            st.name AS student_name,
+            d.department_name,
+            t.teacher_name AS teacher_name
+        FROM
+            Course_Selection cs
+                JOIN Course c ON cs.course_id = c.course_id
+                JOIN Score s ON cs.course_id = s.course_id AND cs.student_id = s.student_id
+                JOIN Student st ON cs.student_id = st.student_id
+                JOIN department d ON st.department_id = d.department_id
+                JOIN teacher t on c.teacher_id = t.teacher_id
+        WHERE
+            cs.course_id = #{courseId}
+
+
+    </select>
+    <select id="getScoreByStudentName" resultType="com.lantu.sys.entity.ScoreForAll">
+        SELECT
+            cs.student_id,
+            c.course_name,
+            s.score,
+            c.course_id,
+            st.name AS student_name,
+            d.department_name,
+            t.teacher_name AS teacher_name
+        FROM
+            Course_Selection cs
+                JOIN Course c ON cs.course_id = c.course_id
+                JOIN Score s ON cs.course_id = s.course_id AND cs.student_id = s.student_id
+                JOIN Student st ON cs.student_id = st.student_id
+                JOIN department d ON st.department_id = d.department_id
+                JOIN teacher t on c.teacher_id = t.teacher_id
+        WHERE
+            st.name = #{studentName}
+
+    </select>
+    <select id="getScoreByTeacherName" resultType="com.lantu.sys.entity.ScoreForAll">
+        SELECT
+            cs.student_id,
+            c.course_name,
+            s.score,
+            c.course_id,
+            st.name AS student_name,
+            d.department_name,
+            t.teacher_name AS teacher_name
+        FROM
+            Course_Selection cs
+                JOIN Course c ON cs.course_id = c.course_id
+                JOIN Score s ON cs.course_id = s.course_id AND cs.student_id = s.student_id
+                JOIN Student st ON cs.student_id = st.student_id
+                JOIN department d ON st.department_id = d.department_id
+                JOIN teacher t on c.teacher_id = t.teacher_id
+        WHERE
+            t.teacher_name  LIKE CONCAT('%',#{teacherName},'%')
+    </select>
 
 </mapper>
