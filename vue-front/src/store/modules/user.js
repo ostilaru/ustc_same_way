@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import {login, logout, getInfo, getStudentInfo, getTeacherInfo, loginRole} from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -6,11 +6,17 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    roleType: '',
   }
 }
 
-const state = getDefaultState()
+const state = {
+  token: getToken(),
+  name: '',
+  avatar: '',
+  roleType: '',
+}
 
 const mutations = {
   RESET_STATE: (state) => {
@@ -24,18 +30,27 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLE_TYPE: (state, roleType) => {
+    state.roleType = roleType
   }
 }
 
 const actions = {
   // user login
   login({ commit }, userInfo) {
+    console.log(userInfo)
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      loginRole({ username: username.trim(), password: password }).then(response => {
         const { data } = response
+        console.log(data)
         commit('SET_TOKEN', data.token)
+        commit('SET_NAME', data.name)
+        commit('SET_AVATAR', data.avatar)
+        commit('SET_ROLE_TYPE', data.roleType)
         setToken(data.token)
+        // console.log(state.roleType)
         resolve()
       }).catch(error => {
         reject(error)
@@ -45,23 +60,35 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+    console.log(state.roleType)
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+      let getInfoApi;
+      if (state.roleType === 'student') {
+        getInfoApi = getStudentInfo;
+      } else if (state.roleType === 'teacher') {
+        getInfoApi = getTeacherInfo;
+      } else {
+        getInfoApi = getInfo;
+      }
 
+      getInfoApi(state.token).then(response => {
+        const { data } = response
         if (!data) {
           reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        const { name, avatar , roleType} = data
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_ROLE_TYPE', roleType)
+
         resolve(data)
       }).catch(error => {
         reject(error)
       })
     })
+
   },
 
   // user logout
@@ -94,4 +121,3 @@ export default {
   mutations,
   actions
 }
-

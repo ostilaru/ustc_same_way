@@ -3,8 +3,14 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+import Vuex from 'vuex';
+Vue.use(Vuex);
+
 /* Layout */
 import Layout from '@/layout'
+import store from '@/store'
+
+
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -66,19 +72,19 @@ export const constantRoutes = [
         path: 'user',
         name: 'user',
         component: () => import('@/views/sys/user'),
-        meta: { title: '教务管理员', icon: 'user' }
+        meta: { title: '教务管理员', icon: 'user' , permission: ['user']}
       },
       {
         path: 'teacher',
         name: 'teacher',
         component: () => import('@/views/sys/teacher.vue'),
-        meta: { title: '院系老师', icon: 'role' }
+        meta: { title: '院系老师', icon: 'role' , permission: ['user', 'teacher', 'student']}
       },
       {
         path: 'student',
         name: 'student',
         component: () => import('@/views/sys/student.vue'),
-        meta: { title: '在校学生', icon: 'role' }
+        meta: { title: '在校学生', icon: 'role' , permission: ['user', 'teacher']}
       }
     ]
   },
@@ -94,38 +100,7 @@ export const constantRoutes = [
         meta: { title: '全校开课情况', icon: 'test' }
       }
     ]
-    // children: [
-    //   {
-    //     path: 'cs',
-    //     name: 'cs',
-    //     component: () => import('@/views/course/cs.vue'),
-    //     meta: { title: '计算机学院', icon: 'debug' }
-    //   },
-    //   {
-    //     path: 'math',
-    //     name: 'math',
-    //     component: () => import('@/views/course/math.vue'),
-    //     meta: { title: '数学院', icon: 'debug' }
-    //   },
-    //   {
-    //     path: 'medical',
-    //     name: 'medical',
-    //     component: () => import('@/views/course/medical.vue'),
-    //     meta: { title: '医学院', icon: 'debug' }
-    //   },
-    //   {
-    //     path: 'music',
-    //     name: 'music',
-    //     component: () => import('@/views/course/music.vue'),
-    //     meta: { title: '音乐学院', icon: 'debug' }
-    //   },
-    //   {
-    //     path: 'physcis',
-    //     name: 'physcis',
-    //     component: () => import('@/views/course/physcis.vue'),
-    //     meta: { title: '物理学院', icon: 'debug' }
-    //   }
-    // ]
+
   },
 
   {
@@ -133,10 +108,64 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
+        path: 'mycourse',
+        name: 'mycourse',
+        component: () => import('@/views/course/myCourse.vue'),
+        meta: { title: '我开设的课程', icon: 'sys', permission: ['teacher'] }
+      }
+    ]
+  },
+
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      // 只能由教务管理员添加
+      {
         path: 'health',
         name: 'health',
         component: () => import('@/views/health/index'),
-        meta: { title: '学生体检情况', icon: 'sys' }
+        meta: { title: '学生体检情况', icon: 'sys' , permission: ['user'] }
+
+      }
+    ]
+  },
+
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: 'score',
+        name: 'score',
+        component: () => import('@/views/score/index.vue'),
+        meta: { title: '全校学生成绩情况', icon: 'sys', permission: ['user'] }
+      }
+    ]
+  },
+
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: 'myhealth',
+        name: 'myhealth',
+        component: () => import('@/views/health/myhealth.vue'),
+        meta: { title: '我的体检报告', icon: 'sys', permission: ['student'] }
+      }
+    ]
+  },
+
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: 'myscore',
+        name: 'myscore',
+        component: () => import('@/views/score/myScore.vue'),
+        meta: { title: '我的成绩单', icon: 'sys', permission: ['student'] }
       }
     ]
   },
@@ -240,5 +269,19 @@ export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
+
+// router.beforeEach((to, from, next) =>{
+//   const requiredPermission = to.meta.permission;
+//   const userPermission = store.state.user.roleType;
+//
+//   if (requiredPermission && !requiredPermission.includes(userPermission)) {
+//     // 没有权限访问该路由, 将其隐藏
+//
+//     next(false);
+//   } else {
+//     // 有权限访问该路由，继续正常导航
+//     next();
+//   }
+// })
 
 export default router

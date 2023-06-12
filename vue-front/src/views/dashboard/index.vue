@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">你好！{{ name }}</div>
   </div>
 </template>
 
@@ -23,8 +23,8 @@ export default {
     margin: 30px;
   }
   &-text {
-    font-size: 30px;
-    line-height: 46px;
+    font-size: 25px;
+    line-height: 45px;
   }
 }
 </style>

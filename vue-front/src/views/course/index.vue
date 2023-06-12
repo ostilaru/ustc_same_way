@@ -105,7 +105,7 @@
     <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
       <el-form :model="courseForm" ref="courseFormRef" :rules="rules">
         <el-form-item label="课程号" prop="courseId" :label-width="formLabelWidth" >
-          <el-input v-model="courseForm.courseId" autocomplete="off" ></el-input>
+          <el-input v-model="courseForm.courseId" autocomplete="off" :disabled="flag"></el-input>
         </el-form-item>
         <el-form-item label="课程名" prop="courseName" :label-width="formLabelWidth">
           <el-input v-model="courseForm.courseName" autocomplete="off"></el-input>

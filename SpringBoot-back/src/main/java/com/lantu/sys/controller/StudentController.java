@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lantu.common.vo.Result;
 import com.lantu.sys.entity.Student;
+import com.lantu.sys.entity.User;
 import com.lantu.sys.service.IPhysicalExamService;
 import com.lantu.sys.service.IStudentService;
+import com.lantu.sys.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -102,6 +104,35 @@ public class StudentController {
     public Result<Student> getStudentById(@PathVariable("student_id") String studentId) {
         Student student = studentService.getById(studentId);
         return Result.success(student);
+    }
+
+
+    @PostMapping("/login")
+    public Result<Map<String, Object>> login(@RequestBody Student stu) {
+        // System.out.println(stu);
+        Map<String, Object> data = studentService.studentLogin(stu);
+        // System.out.println(data);
+
+        if(data != null) {
+            System.out.println("登录成功");
+            return Result.success(data);
+        }
+        return Result.fail(20002, "用户名或密码错误");
+    }
+
+    @GetMapping("/info")
+    public Result<Map<String, Object>> getStudentInfo(@RequestParam("token") String token) {
+        Map<String, Object> data = studentService.getStudentInfo(token);
+        if(data != null) {
+            return Result.success(data);
+        }
+        return Result.fail(20003, "token无效");
+    }
+
+    @PostMapping("/logout")
+    public Result<?> logout(@RequestParam("token") String token) {
+        studentService.logout(token);
+        return Result.success("退出成功");
     }
 
 }
