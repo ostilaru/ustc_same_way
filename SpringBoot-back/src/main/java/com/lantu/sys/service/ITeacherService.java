@@ -20,4 +20,6 @@ public interface ITeacherService extends IService<Teacher> {
     Map<String, Object> getTeacherInfo(String token);
 
     void logout(String token);
+
+    Map<String, Object> getMyCourseByTeacherId(String teacherId);
 }

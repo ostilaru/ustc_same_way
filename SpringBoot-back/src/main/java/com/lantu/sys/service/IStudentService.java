@@ -23,4 +23,6 @@ public interface IStudentService extends IService<Student> {
     void logout(String token);
 
     Map<String, Object> getMyScoreById(String studentId);
+
+    Map<String, Object> getMyCourseById(String studentId);
 }

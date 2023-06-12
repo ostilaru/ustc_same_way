@@ -118,4 +118,13 @@ public class TeacherController {
         return Result.success("退出成功");
     }
 
+    @GetMapping("/mycourse")
+    public Result<Map<String, Object>> getMyCourse(@RequestParam("teacher_id") String teacherId) {
+        Map<String, Object> data = teacherService.getMyCourseByTeacherId(teacherId);
+        if (data != null) {
+            return Result.success(data);
+        }
+        return Result.fail(20004, "查询失败");
+    }
+
 }

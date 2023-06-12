@@ -26,4 +26,32 @@
             cs.student_id = #{studentId}
     </select>
 
+    <resultMap id="stuCourseResultMap" type="com.lantu.sys.entity.MyCourse">
+        <id property="teacherId" column="teacher_id"/>
+        <result property="teacherName" column="teacher_name"/>
+        <result property="courseId" column="course_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="creditPoints" column="credit_points"/>
+        <result property="classSchedule" column="class_schedule"/>
+        <result property="classroomLocation" column="classroom_location"/>
+        <result property="departmentId" column="department_id"/>
+    </resultMap>
+    <select id="getCourseByStudentId" resultMap="stuCourseResultMap">
+        SELECT
+            t.teacher_id,
+            t.teacher_name,
+            c.course_id,
+            c.course_name,
+            c.credit_points,
+            c.class_schedule,
+            c.classroom_location,
+            c.department_id
+        FROM
+            Course c
+                JOIN Teacher t ON c.teacher_id = t.teacher_id
+                JOIN Course_Selection cs ON cs.student_id = #{student_id} AND cs.course_id = c.course_id
+        WHERE
+            cs.student_id = #{student_id}
+    </select>
+
 </mapper>

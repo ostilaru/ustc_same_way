@@ -2,6 +2,7 @@ package com.lantu.sys.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lantu.sys.entity.MyCourse;
 import com.lantu.sys.entity.Student;
 import com.lantu.sys.entity.Teacher;
 import com.lantu.sys.mapper.TeacherMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -80,5 +82,16 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         System.out.println("正在调用teacher的logout方法");
         // 删除redis中的token
         redisTemplate.delete(token);
+    }
+
+    @Override
+    public Map<String, Object> getMyCourseByTeacherId(String teacherId) {
+        System.out.println("正在调用getMyCourseByTeacherId方法");
+        // 根据teacherId查询
+        List<MyCourse> courseList = this.baseMapper.getCourseByTeacherId(teacherId);
+        // 返回数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("courseList", courseList);
+        return data;
     }
 }

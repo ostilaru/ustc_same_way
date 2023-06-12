@@ -2,6 +2,7 @@ package com.lantu.sys.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lantu.sys.entity.MyCourse;
 import com.lantu.sys.entity.MyScore;
 import com.lantu.sys.entity.Student;
 import com.lantu.sys.mapper.StudentMapper;
@@ -95,6 +96,17 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         // 返回数据
         Map<String, Object> data = new HashMap<>();
         data.put("scoreList", scoreList);
+        return data;
+    }
+
+    @Override
+    public Map<String, Object> getMyCourseById(String studentId) {
+        System.out.println("正在调用getMyCourseById方法");
+        // 根据学号查询课程
+        List<MyCourse> courseList = this.baseMapper.getCourseByStudentId(studentId);
+        // 返回数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("courseList", courseList);
         return data;
     }
 

@@ -3,18 +3,18 @@
     <!-- 结果表格 -->
     <el-card>
       <el-table
-        :data="myscoreList"
+        :data="myCourseList"
         stripe
         style="width: 100%">
         <el-table-column
-          prop="studentId"
-          label="学号"
-          width="150">
+          prop="teacherId"
+          label="教师工号"
+          width="120">
         </el-table-column>
         <el-table-column
-          prop="studentName"
-          label="姓名"
-          width="100">
+          prop="teacherName"
+          label="教师姓名"
+          width="120">
         </el-table-column>
         <el-table-column
           prop="courseId"
@@ -32,11 +32,20 @@
           width="100">
         </el-table-column>
         <el-table-column
-          prop="score"
-          label="成绩"
+          prop="classSchedule"
+          label="上课时间"
+          width="200">
+        </el-table-column>
+        <el-table-column
+          prop="classroomLocation"
+          label="上课地点"
           width="120">
         </el-table-column>
-
+        <el-table-column
+          prop="departmentId"
+          label="开设院系"
+          width="120">
+        </el-table-column>
 
       </el-table>
     </el-card>
@@ -44,36 +53,26 @@
 </template>
 
 <script>
-import myscoreApi from '@/api/myScoreManage'
+import stuAPI from "@/api/studentManage";
 export default {
-  name: "myCourse",
   data() {
     return {
-      myscoreList: [],
-      myscoreForm: {
-        studentId: '',
-        studentName: '',
-        courseId: '',
-        courseName: '',
-        creditPoint: '',
-        score: '',
-      },
-      total: 0,
+      myCourseList: [],
 
     }
   },
   methods: {
-    getMyScoreList(){
+    getMyCourseList(){
       const studentId = this.$store.state.user.name
-      myscoreApi.getMyScoreList(studentId).then(res => {
-        this.myscoreList = res.data.scoreList
-        // this.total = res.data.scoreList.length
+      stuAPI.getMyCourseList(studentId).then(response => {
+        this.myCourseList = response.data.courseList
+      }).catch(error => {
+        console.log(error)
       })
-    }
+    },
   },
-
   created() {
-    this.getMyScoreList()
+    this.getMyCourseList()
   }
 }
 </script>

@@ -91,4 +91,6 @@ public class PhysicalExamController {
         PhysicalExam physicalExam = physicalExamService.getById(studentId);
         return Result.success(physicalExam);
     }
+
+
 }
