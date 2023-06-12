@@ -53,8 +53,7 @@
 </template>
 
 <script>
-import myCourseApi from "@/api/teacherManage";
-
+import stuAPI from "@/api/studentManage";
 export default {
   data() {
     return {
@@ -64,8 +63,8 @@ export default {
   },
   methods: {
     getMyCourseList(){
-      const teacherId = this.$store.state.user.name
-      myCourseApi.getMyCourseByTeacherId(teacherId).then(response => {
+      const studentId = this.$store.state.user.name
+      stuAPI.getMyCourseList(studentId).then(response => {
         this.myCourseList = response.data.courseList
       }).catch(error => {
         console.log(error)

@@ -120,4 +120,10 @@ class XAdminApplicationTests {
         teacherCourses.forEach(System.out::println);
     }
 
+    @Test
+    void testStudentCourse() {
+        List<MyCourse> studentCourses = studentMapper.getCourseByStudentId("PB200502049");
+        studentCourses.forEach(System.out::println);
+    }
+
 }

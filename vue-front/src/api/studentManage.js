@@ -55,6 +55,16 @@ export default {
       url: `/student/${student_id}`,
       method: 'delete'
     });
-  }
+  },
+
+  getMyCourseList(student_id) {
+    return request({
+      url: `/student/mycourse`,
+      method: 'get',
+      params: {
+        student_id: student_id
+      }
+    });
+  },
 
 }

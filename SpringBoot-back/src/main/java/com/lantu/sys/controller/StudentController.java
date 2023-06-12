@@ -147,8 +147,15 @@ public class StudentController {
             return Result.success(data);
         }
         return Result.fail(20004, "查询失败");
+    }
 
-
+    @GetMapping("/mycourse")
+    public  Result<Map<String, Object>> getMyCourseById(@RequestParam(value = "student_id") String studentId) {
+        Map<String, Object> data = studentService.getMyCourseById(studentId);
+        if (data != null) {
+            return Result.success(data);
+        }
+        return Result.fail(20004, "查询失败");
     }
 
 }
