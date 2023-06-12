@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-button @click="getMyScoreList" type="primary" round icon="el-icon-search">查询</el-button>
     <!-- 结果表格 -->
     <el-card>
       <el-table

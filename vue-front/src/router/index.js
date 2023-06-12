@@ -149,10 +149,10 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'myhealth',
-        name: 'myhealth',
-        component: () => import('@/views/health/myhealth.vue'),
-        meta: { title: '我的体检报告', icon: 'sys', permission: ['student'] }
+        path: 'studentcourse',
+        name: 'studentcourse',
+        component: () => import('@/views/course/studentCourse.vue'),
+        meta: { title: '我选修的课程', icon: 'sys', permission: ['student'] }
       }
     ]
   },
@@ -166,6 +166,19 @@ export const constantRoutes = [
         name: 'myscore',
         component: () => import('@/views/score/myScore.vue'),
         meta: { title: '我的成绩单', icon: 'sys', permission: ['student'] }
+      }
+    ]
+  },
+
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: 'myhealth',
+        name: 'myhealth',
+        component: () => import('@/views/health/myhealth.vue'),
+        meta: { title: '我的体检报告', icon: 'sys', permission: ['student'] }
       }
     ]
   },

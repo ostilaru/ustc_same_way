@@ -54,6 +54,16 @@ export default {
       url: `/teacher/${teacher_id}`,
       method: "delete"
     });
+  },
+
+  getMyCourseByTeacherId(teacher_id) {
+    return request({
+      url: `/teacher/mycourse`,
+      method: "get",
+      params: {
+        teacher_id: teacher_id
+      }
+    });
   }
 
 }
