@@ -102,5 +102,16 @@ class XAdminApplicationTests {
         teachers.forEach(System.out::println);
     }
 
+    @Test
+    void testUser_MINE() {
+        List<String> roleNameByUserId = userMapper.getRoleNameByUserId(9);
+        System.out.println(roleNameByUserId);
+    }
+
+    @Test
+    void testStudentScore() {
+        List<MyScore> studentScores = studentMapper.getScoreByStudentId("PB200502049");
+        studentScores.forEach(System.out::println);
+    }
 
 }
