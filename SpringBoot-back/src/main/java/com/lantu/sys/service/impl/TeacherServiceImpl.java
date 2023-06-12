@@ -49,7 +49,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
             // 返回数据
             Map<String, Object> data = new HashMap<>();
             data.put("token", key);
-            data.put("name", loginTeacher.getTeacherName());
+            data.put("name", loginTeacher.getTeacherId());
             data.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
             data.put("roleType", "teacher");
             return data;
@@ -67,7 +67,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
             Teacher LoginTeacher = JSON.parseObject(JSON.toJSONString(obj), Teacher.class);
             // 返回数据
             Map<String, Object> data = new HashMap<>();
-            data.put("name", LoginTeacher.getTeacherName());
+            data.put("name", LoginTeacher.getTeacherId());
             data.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
             data.put("roleType", "teacher");
             return data;

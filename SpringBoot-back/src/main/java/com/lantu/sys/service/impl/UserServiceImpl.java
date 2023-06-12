@@ -101,14 +101,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             } else if (roleType.equals("teacher")) {
                 Teacher loginTeacher = JSON.parseObject(JSON.toJSONString(obj), Teacher.class);
                 Map<String, Object> data = new HashMap<>();
-                data.put("name", loginTeacher.getTeacherName());
+                data.put("name", loginTeacher.getTeacherId());
                 data.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
                 data.put("roleType", "teacher");
                 return data;
             } else if (roleType.equals("student")) {
                 Student loginStudent = JSON.parseObject(JSON.toJSONString(obj), Student.class);
                 Map<String, Object> data = new HashMap<>();
-                data.put("name", loginStudent.getName());
+                data.put("name", loginStudent.getStudentId());
                 data.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
                 data.put("roleType", "student");
                 return data;
