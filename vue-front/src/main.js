@@ -15,6 +15,8 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import * as echarts from "echarts";
+
 // Vue的入口文件
 
 /**

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * <p>
@@ -79,4 +78,6 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score> implements
         data.put("scoreForAllList", scoreForAllList);
         return data;
     }
+
+
 }

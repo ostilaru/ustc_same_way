@@ -2,7 +2,9 @@ package com.lantu.sys.service;
 
 import com.lantu.sys.entity.Score;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lantu.sys.entity.ScoreForAll;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +29,6 @@ public interface IScoreService extends IService<Score> {
     Map<String, Object> getScoreByStudentNameAndCourseName(String studentName, String courseName);
 
     Map<String, Object> getScoreByTeacherId(String studentId, String studentName);
-
 
 
 }

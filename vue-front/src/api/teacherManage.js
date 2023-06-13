@@ -64,6 +64,16 @@ export default {
         teacher_id: teacher_id
       }
     });
+  },
+
+  getTeacherNameById(teacher_id) {
+    return request({
+      url: `/teacher/name`,
+      method: "get",
+      params: {
+        teacher_id: teacher_id
+      }
+    });
   }
 
 }

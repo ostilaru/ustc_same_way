@@ -36,6 +36,10 @@ export default {
     this.getBreadcrumb()
   },
   methods: {
+    resetBreadcrumb() {
+      console.log("已经调用清空面包屑方法")
+      this.levelList = null
+    },
     getBreadcrumb() {
       // only show routes with meta.title
       let matched = this.$route.matched.filter(item => item.meta && item.meta.title)

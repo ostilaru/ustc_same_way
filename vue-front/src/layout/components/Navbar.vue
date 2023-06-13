@@ -2,7 +2,7 @@
   <div class="navbar">
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <breadcrumb class="breadcrumb-container" ref="breadcrumbContainerRef"/>
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
@@ -11,11 +11,6 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-<!--          <router-link to="https://icourse.club/">-->
-<!--            <el-dropdown-item>-->
-<!--              评课社区-->
-<!--            </el-dropdown-item>-->
-<!--          </router-link>-->
           <a target="_blank" href="https://www.teach.ustc.edu.cn/">
             <el-dropdown-item>教务处</el-dropdown-item>
           </a>
@@ -26,9 +21,6 @@
             <el-dropdown-item>评课社区</el-dropdown-item>
           </a>
 
-<!--          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">-->
-<!--            <el-dropdown-item>Docs</el-dropdown-item>-->
-<!--          </a>-->
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出</span>
           </el-dropdown-item>
@@ -59,8 +51,12 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
+      // 在退出时清除面包屑
+      // console.log("调用登出方法")
+      this.$store.dispatch('tagsView/delAllViews')
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push('/dashboard')
     }
   }
 }

@@ -5,20 +5,28 @@ export default {
   getScoreList(searchModel) {
     return request({
       url: "/score/list",
-      method: "post",
+      method: "get",
       params: {
         pageNo: searchModel.pageNo,
         pageSize: searchModel.pageSize,
         course_id: searchModel.course_id,
         course_name: searchModel.course_name,
-        teacher_id: searchModel.teacher_id,
-        department_id: searchModel.department_id,
+        teacher_name: searchModel.teacher_name,
+        department_name: searchModel.department_name,
         student_id: searchModel.student_id,
         student_name: searchModel.student_name,
         score: searchModel.score,
       }
     });
   },
+
+  getAllScore() {
+    return request({
+      url: "/score/all",
+      method: "get",
+    });
+  },
+
 
   getScoreByStudentId_CourseId(student_id, course_id) {
     return request({

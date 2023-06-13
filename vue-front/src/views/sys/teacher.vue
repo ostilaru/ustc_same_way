@@ -85,8 +85,8 @@
           label="在职状态"
           width="150">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status == '在校'" type="success" effect="light">在校</el-tag>
-            <el-tag v-else type="danger" effect="light">休假</el-tag>
+            <el-tag v-if="scope.row.status == '在校'" type="success" effect="light">休假</el-tag>
+            <el-tag v-else type="success" effect="light">在职</el-tag>
           </template>
         </el-table-column>
         <el-table-column

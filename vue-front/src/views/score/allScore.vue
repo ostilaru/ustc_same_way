@@ -56,7 +56,7 @@
           width="100">
         </el-table-column>
         <el-table-column
-          prop="departmentId"
+          prop="departmentName"
           label="院系"
           width="70">
         </el-table-column>
@@ -175,6 +175,7 @@
 
 <script>
 import stuApi from "@/api/studentManage";
+import allScoreAPI from "@/api/allScore";
 
 export default {
   data() {
@@ -198,7 +199,7 @@ export default {
         studentId: '',
         studentName: '',
         teacherName: '',
-        departmentId: '',
+        departmentName: '',
         score: '',
       },
       formLabelWidth: '130px',
@@ -245,7 +246,10 @@ export default {
       this.getScoreList()
     },
     getScoreList() {
-
+      allScoreAPI.getAllScore().then(res => {
+        this.scoreList = res.data.scoreList
+        this.total = res.data.total
+      })
     },
     openEditUI(student_id) {
       console.log(student_id);

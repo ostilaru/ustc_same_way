@@ -3,14 +3,11 @@ package com.lantu.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lantu.common.vo.Result;
-import com.lantu.sys.entity.Student;
 import com.lantu.sys.entity.Teacher;
-import com.lantu.sys.service.IStudentService;
 import com.lantu.sys.service.ITeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +36,7 @@ public class TeacherController {
     //分页查询
     @GetMapping("/list")
     public Result<Map<String, Object>> getTeacherList(@RequestParam(value = "teacher_id", required = false) String teacherId,
-                                                      @RequestParam(value = "teacher_name", required = false) String teacherName,
+                                                      @RequestParam(value = "name", required = false) String teacherName,
                                                       @RequestParam(value = "gender", required = false) String gender,
                                                       @RequestParam(value = "department_id", required = false) String departmentId,
                                                       @RequestParam(value = "contact_phone", required = false) String contactPhone,
@@ -125,6 +122,14 @@ public class TeacherController {
             return Result.success(data);
         }
         return Result.fail(20004, "查询失败");
+    }
+
+    @GetMapping("/name")
+    public Result<Object> getTeacherNameById(@RequestParam("teacher_id") String teacherId) {
+        LambdaQueryWrapper<Teacher> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Teacher::getTeacherId, teacherId);
+        Teacher teacher = teacherService.getOne(queryWrapper);
+        return Result.success(teacher.getTeacherName());
     }
 
 }

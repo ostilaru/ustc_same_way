@@ -91,4 +91,89 @@
             t.teacher_name  LIKE CONCAT('%',#{teacherName},'%')
     </select>
 
+    <select id="getScoreCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) AS count
+        FROM Course_Selection cs
+        JOIN Course c ON cs.course_id = c.course_id
+        JOIN Score s ON cs.course_id = s.course_id AND cs.student_id = s.student_id
+        JOIN Student st ON cs.student_id = st.student_id
+        JOIN department d ON st.department_id = d.department_id
+        JOIN teacher t on c.teacher_id = t.teacher_id
+        WHERE
+        1 = 1
+        <if test="courseId != null">
+            AND c.course_id = #{courseId}
+        </if>
+        <if test="courseName != null">
+            AND c.course_name LIKE CONCAT('%',#{courseName},'%')
+        </if>
+        <if test="studentId != null">
+            AND s.student_id = #{studentId}
+        </if>
+        <if test="studentName != null">
+            AND st.name LIKE CONCAT('%',#{studentName},'%')
+        </if>
+        <if test="score != null">
+            AND s.score = #{score}
+        </if>
+        <if test="teacherName != null">
+            AND t.teacher_name LIKE CONCAT('%',#{teacherName},'%')
+        </if>
+        <if test="departmentName != null">
+            AND d.department_name = #{departmentName}
+        </if>
+    </select>
+
+
+    <select id="getScoreList" resultMap="scoreResultMap">
+        SELECT
+            cs.student_id,
+            c.course_name,
+            s.score,
+            c.course_id,
+            st.name AS student_name,
+            d.department_name,
+            t.teacher_name AS teacher_name
+        FROM
+            Course_Selection cs
+                JOIN Course c ON cs.course_id = c.course_id
+                JOIN Score s ON cs.course_id = s.course_id AND cs.student_id = s.student_id
+                JOIN Student st ON cs.student_id = st.student_id
+                JOIN department d ON st.department_id = d.department_id
+                JOIN teacher t on c.teacher_id = t.teacher_id
+        WHERE
+        1 = 1
+        <if test="courseId != null">
+            AND c.course_id = #{courseId}
+        </if>
+        <if test="courseName != null">
+            AND c.course_name LIKE CONCAT('%',#{courseName},'%')
+        </if>
+        <if test="studentId != null">
+            AND s.student_id = #{studentId}
+        </if>
+        <if test="studentName != null">
+            AND st.name LIKE CONCAT('%',#{studentName},'%')
+        </if>
+        <if test="score != null">
+            AND s.score = #{score}
+        </if>
+        <if test="teacherName != null">
+            AND t.teacher_name LIKE CONCAT('%',#{teacherName},'%')
+        </if>
+        <if test="departmentName != null">
+            AND d.department_name = #{departmentName}
+        </if>
+        LIMIT #{limit} OFFSET #{start}
+    </select>
+
+    <update id="updateScore" parameterType="com.lantu.sys.entity.Score">
+        UPDATE Score
+        SET score = #{score}
+        WHERE
+            student_id = #{studentId}
+        AND course_id = #{courseId}
+    </update>
+
+
 </mapper>

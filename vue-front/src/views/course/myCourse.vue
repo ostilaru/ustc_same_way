@@ -57,7 +57,7 @@
         <el-col :span="22">
           <el-input v-model="searchModel.course_id" placeholder="课程号" clearable></el-input>
           <el-input v-model="searchModel.course_name" placeholder="课程名" clearable></el-input>
-          <el-select v-model="searchModel.department_id" clearable placeholder="院系">
+          <el-select v-model="searchModel.department_name" clearable placeholder="院系">
             <el-option
               v-for="item in options2"
               :key="item.value"
@@ -67,11 +67,11 @@
           </el-select>
           <el-input v-model="searchModel.student_id" placeholder="学号" clearable></el-input>
           <el-input v-model="searchModel.student_name" placeholder="学生姓名" clearable></el-input>
-          <el-button @click="getScoreList" type="primary" round icon="el-icon-search">查询</el-button>
+          <el-button @click="getMyCourseScoreList" type="primary" round icon="el-icon-search">查询</el-button>
         </el-col>
 
         <el-col :span="2" align="right">
-          <el-button @click="openEditUI(null)" type="primary" icon="el-icon-plus" round>新增</el-button>
+
 
         </el-col>
       </el-row>
@@ -107,7 +107,7 @@
           width="120">
         </el-table-column>
         <el-table-column
-          prop="departmentId"
+          prop="departmentName"
           label="院系"
           width="100">
         </el-table-column>
@@ -130,8 +130,7 @@
           label="操作"
           width="120">
           <template slot-scope="scope">
-            <el-button @click="openEditUI(scope.row.studentId)" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
-            <el-button @click="deleteScore(scope.row.studentId, scope.row.course_id)" type="danger" size="mini" icon="el-icon-delete" circle></el-button>
+            <el-button @click="openEditUI(scope.row.courseId, scope.row.studentId)" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -148,12 +147,54 @@
       :total="total">
     </el-pagination>
 
+    <!-- 用户信息编辑对话框 -->
+    <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
+      <el-form :model="myCourseScoreForm" ref="myCourseScoreFormRef" :rules="rules">
+        <el-form-item label="课程号" prop="courseId" :label-width="formLabelWidth" >
+          <el-input v-model="myCourseScoreForm.studentId" autocomplete="off" :disabled="flag" ></el-input>
+        </el-form-item>
+        <el-form-item label="课程名" prop="name" :label-width="formLabelWidth">
+          <el-input v-model="myCourseScoreForm.courseName" autocomplete="off" :disabled="flag"></el-input>
+        </el-form-item>
+        <el-form-item label="授课教师" prop="teacherName" :label-width="formLabelWidth">
+          <el-input v-model="myCourseScoreForm.teacherName" autocomplete="off" :disabled="flag"></el-input>
+        </el-form-item>
+        <el-form-item label="院系" prop="departmentName" :label-width="formLabelWidth">
+          <el-select v-model="myCourseScoreForm.departmentName" clearable placeholder="请选择" :disabled="flag">
+            <el-option
+              v-for="item in options2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="学号" prop="studentId" :label-width="formLabelWidth">
+          <el-input v-model="myCourseScoreForm.studentId" autocomplete="off" :disabled="flag"></el-input>
+        </el-form-item>
+        <el-form-item label="学生姓名" prop="studentName" :label-width="formLabelWidth">
+          <el-input v-model="myCourseScoreForm.studentName" autocomplete="off" :disabled="flag"></el-input>
+        </el-form-item>
+        <el-form-item label="成绩" prop="score" :label-width="formLabelWidth">
+          <el-input v-model="myCourseScoreForm.score" autocomplete="off"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveScore">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import myCourseApi from '@/api/teacherManage'
 import allScoreAPI from "@/api/allScore";
+import teacherAPI from "@/api/teacherManage";
+import {int} from "mockjs/src/mock/random/basic";
+
 export default {
   name: "myCourse",
   data() {
@@ -164,32 +205,33 @@ export default {
         student_id: '',
         student_name: '',
         teacher_name: '',
-        department_id: '',
+        department_name: '',
         score: '',
         pageNo: 1,
-        pagesize: 10,
+        pageSize: 10,
       },
       total: 0,
       title: '',
+      flag: false,
       scoreList: [],
       myCourseList: [],
       formLabelWidth: '130px',
       dialogFormVisible: false,
       options2: [{
-        value: '1',
-        label: '1（数学院）'
+        value: '数学院',
+        label: '数学院'
       }, {
-        value: '2',
-        label: '2（物理学院）'
+        value: '物理学院',
+        label: '物理学院'
       }, {
-        value: '3',
-        label: '3（医学院）'
+        value: '医学院',
+        label: '医学院'
       }, {
-        value: '4',
-        label: '4（计算机学院）'
+        value: '计算机学院',
+        label: '计算机学院'
       }, {
-        value: '5',
-        label: '5（音乐学院）'
+        value: '音乐学院',
+        label: '音乐学院'
       }],
       rules:{
         studentId: [
@@ -215,17 +257,26 @@ export default {
         classroomLocation: '',
         departmentId: '',
       },
+      myCourseScoreForm: {
+        courseId: '',
+        courseName: '',
+        teacherName: '',
+        departmentName: '',
+        studentId: '',
+        studentName: '',
+        score: '',
+      },
 
     }
   },
   methods: {
     handleSizeChange(pageSize) {
       this.searchModel.pageSize = pageSize
-      this.getScoreList()
+      this.getMyCourseScoreList()
     },
     handleCurrentChange(pageNo) {
       this.searchModel.pageNo = pageNo
-      this.getScoreList()
+      this.getMyCourseScoreList()
     },
     getMyCourseList(){
       const teacherId = this.$store.state.user.name
@@ -235,23 +286,82 @@ export default {
         console.log(error)
       })
     },
-    getMyCourseScoreList(){
-
+    saveScore(){
+      // 先发出警告
+      this.$confirm('此操作将永久修改'+ this.myCourseScoreForm.studentName +'的成绩, 是否继续?', '注意', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 先触发表单验证
+        this.$refs.myCourseScoreFormRef.validate((valid) => {
+          if (valid) {
+            // 为后端封装一个 Score 对象
+            let ScoreToBack = {
+              courseId: this.myCourseScoreForm.courseId,
+              studentId: this.myCourseScoreForm.studentId,
+              score: this.myCourseScoreForm.score
+            }
+            // 提交请求给后台
+            allScoreAPI.saveScore(ScoreToBack, this.title).then(response => {
+              // 给出成功提示
+              this.$message({
+                message: response.message,
+                type: 'success',
+              });
+              // 关闭窗口
+              this.dialogFormVisible = false;
+              // 刷新列表
+              this.getMyCourseScoreList();
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消保存'
+        });
+      });
     },
-    openEditUI(student_id) {
+    getTeacherName(){
+      const teacher_id = this.$store.state.user.name
+      teacherAPI.getTeacherNameById(teacher_id).then(response => {
+        this.searchModel.teacher_name = response.message
+        console.log(this.searchModel.teacher_name)
+      }).catch(error => {
+        console.log('获取教师姓名失败！' )
+      })
+    },
+    getMyCourseScoreList(){
+      console.log("调用了getMyCourseScoreList")
+      allScoreAPI.getScoreList(this.searchModel).then(response => {
+        this.scoreList = response.data.rows
+        this.total = response.data.total
+      }).catch(error => {
+        console.log('获取成绩列表失败！' )
+      })
+    },
+    openEditUI(course_id, student_id) {
       if(student_id == null){
         this.flag = false;
         this.title = "新增成绩单";
       }else{
         this.flag = true;
         this.title = "修改成绩单";
-        console.log(student_id);
         // 根据student_id查询用户信息
-        allScoreAPI.getStudentById(student_id).then(res => {
-          this.studentForm = res.data;
+        this.searchModel.course_id = course_id;
+        this.searchModel.student_id = student_id;
+        allScoreAPI.getScoreList(this.searchModel).then(res => {
+          console.log(res.data)
+          this.myCourseScoreForm = res.data.rows[0]
+          console.log(this.myCourseScoreForm)
         });
+        this.searchModel.course_id = '';
+        this.searchModel.student_id = '';
       }
-
       this.dialogFormVisible = true;
     },
     clearValidate(props = []) {
@@ -276,17 +386,36 @@ export default {
       };
       this.$refs.scoreFormRef.clearValidate();
     },
+
   },
 
   created() {
+
+
+    this.getTeacherName()
+
     this.getMyCourseList()
-    this.getMyCourseScoreList()
-  }
+
+    // this.getMyCourseScoreList()
+
+  },
+  mounted() {
+    setTimeout(() => {
+      this.getMyCourseScoreList();
+    }, 300); // 延迟1秒执行
+
+  },
 }
 </script>
 
 <style scoped>
 #search .el-input {
+  width: 125px !important;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+#search .el-select {
   width: 125px !important;
   margin-right: 10px;
   margin-bottom: 5px;

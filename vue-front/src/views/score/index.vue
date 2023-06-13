@@ -7,7 +7,7 @@
           <el-input v-model="searchModel.course_id" placeholder="课程号" clearable></el-input>
           <el-input v-model="searchModel.course_name" placeholder="课程名" clearable></el-input>
           <el-input v-model="searchModel.teacher_name" placeholder="授课教师" clearable></el-input>
-          <el-select v-model="searchModel.department_id" clearable placeholder="院系">
+          <el-select v-model="searchModel.department_name" clearable placeholder="院系">
             <el-option
               v-for="item in options2"
               :key="item.value"
@@ -17,6 +17,7 @@
           </el-select>
           <el-input v-model="searchModel.student_id" placeholder="学号" clearable></el-input>
           <el-input v-model="searchModel.student_name" placeholder="学生姓名" clearable></el-input>
+          <el-input v-model="searchModel.score" placeholder="分数" clearable></el-input>
           <el-button @click="getScoreList" type="primary" round icon="el-icon-search">查询</el-button>
         </el-col>
 
@@ -35,7 +36,7 @@
         style="width: 100%">
         <el-table-column
           label="#"
-          width="50">
+          width="60">
           <template slot-scope="scope">
             <!-- (pageNo-1) * pageSize + index + 1 -->
             {{(searchModel.pageNo-1) * searchModel.pageSize + scope.$index + 1}}
@@ -44,7 +45,7 @@
         <el-table-column
           prop="courseId"
           label="课程号"
-          width="120">
+          width="100">
         </el-table-column>
         <el-table-column
           prop="courseName"
@@ -57,7 +58,7 @@
           width="120">
         </el-table-column>
         <el-table-column
-          prop="departmentId"
+          prop="departmentName"
           label="院系"
           width="100">
         </el-table-column>
@@ -80,8 +81,8 @@
           label="操作"
           width="120">
           <template slot-scope="scope">
-            <el-button @click="openEditUI(scope.row.studentId)" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
-            <el-button @click="deleteScore(scope.row.studentId, scope.row.course_id)" type="danger" size="mini" icon="el-icon-delete" circle></el-button>
+            <el-button @click="openEditUI(scope.row.courseId, scope.row.studentId)" type="primary" size="mini" icon="el-icon-edit" circle></el-button>
+            <el-button @click="" type="danger" size="mini" icon="el-icon-delete" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -100,36 +101,43 @@
 
     <!-- 用户信息编辑对话框 -->
     <el-dialog @close="clearForm" :title="title" :visible.sync="dialogFormVisible">
-      <el-form :model="scoreForm" ref="scoreFormRef" :rules="rules">
-        <el-form-item label="课程号" prop="courseId" :label-width="formLabelWidth">
-          <el-input v-model="scoreForm.courseId" autocomplete="off" :disabled="flag"></el-input>
+      <el-form :model="scoreForm" ref="ScoreFormRef" :rules="rules">
+        <el-form-item label="课程号" prop="courseId" :label-width="formLabelWidth" >
+          <el-input v-model="scoreForm.studentId" autocomplete="off" :disabled="flag" ></el-input>
         </el-form-item>
-        <el-form-item label="课程名" prop="courseName" :label-width="formLabelWidth">
+        <el-form-item label="课程名" prop="name" :label-width="formLabelWidth">
           <el-input v-model="scoreForm.courseName" autocomplete="off" :disabled="flag"></el-input>
         </el-form-item>
         <el-form-item label="授课教师" prop="teacherName" :label-width="formLabelWidth">
           <el-input v-model="scoreForm.teacherName" autocomplete="off" :disabled="flag"></el-input>
         </el-form-item>
-        <el-form-item label="学号" prop="studentId" :label-width="formLabelWidth" >
-          <el-input v-model="scoreForm.studentId" autocomplete="off"  :disabled="flag"></el-input>
+        <el-form-item label="院系" prop="departmentName" :label-width="formLabelWidth">
+          <el-select v-model="scoreForm.departmentName" clearable placeholder="请选择" :disabled="flag">
+            <el-option
+              v-for="item in options2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="姓名" prop="name" :label-width="formLabelWidth">
-          <el-input v-model="scoreForm.name" autocomplete="off"></el-input>
+        <el-form-item label="学号" prop="studentId" :label-width="formLabelWidth">
+          <el-input v-model="scoreForm.studentId" autocomplete="off" :disabled="flag"></el-input>
         </el-form-item>
-        <el-form-item label="院系号" prop="departmentId" :label-width="formLabelWidth">
-          <el-input v-model="scoreForm.departmentId" autocomplete="off" :disabled="flag"></el-input>
+        <el-form-item label="学生姓名" prop="studentName" :label-width="formLabelWidth">
+          <el-input v-model="scoreForm.studentName" autocomplete="off" :disabled="flag"></el-input>
         </el-form-item>
         <el-form-item label="成绩" prop="score" :label-width="formLabelWidth">
           <el-input v-model="scoreForm.score" autocomplete="off"></el-input>
         </el-form-item>
 
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="">确 定</el-button>
+        <el-button type="primary" @click="saveScore">确 定</el-button>
       </div>
     </el-dialog>
+
 
   </div>
 </template>
@@ -146,13 +154,14 @@ export default {
         student_id: '',
         student_name: '',
         teacher_name: '',
-        department_id: '',
+        department_name: '',
         score: '',
         pageNo: 1,
-        pagesize: 10,
+        pageSize: 10,
       },
       total: 0,
       title: '',
+      flag: false,
       scoreList: [],
       scoreForm: {
         courseId: '',
@@ -160,26 +169,26 @@ export default {
         studentId: '',
         studentName: '',
         teacherName: '',
-        departmentId: '',
+        departmentName: '',
         score: '',
       },
       formLabelWidth: '130px',
       dialogFormVisible: false,
       options2: [{
-        value: '1',
-        label: '1（数学院）'
+        value: '数学院',
+        label: '数学院'
       }, {
-        value: '2',
-        label: '2（物理学院）'
+        value: '物理学院',
+        label: '物理学院'
       }, {
-        value: '3',
-        label: '3（医学院）'
+        value: '医学院',
+        label: '医学院'
       }, {
-        value: '4',
-        label: '4（计算机学院）'
+        value: '计算机学院',
+        label: '计算机学院'
       }, {
-        value: '5',
-        label: '5（音乐学院）'
+        value: '音乐学院',
+        label: '音乐学院'
       }],
       rules:{
         studentId: [
@@ -212,20 +221,24 @@ export default {
         this.total = res.data.total
       })
     },
-    openEditUI(student_id) {
+    openEditUI(course_id, student_id) {
       if(student_id == null){
         this.flag = false;
         this.title = "新增成绩单";
       }else{
         this.flag = true;
         this.title = "修改成绩单";
-        console.log(student_id);
         // 根据student_id查询用户信息
-        allScoreAPI.getStudentById(student_id).then(res => {
-          this.studentForm = res.data;
+        this.searchModel.course_id = course_id;
+        this.searchModel.student_id = student_id;
+        allScoreAPI.getScoreList(this.searchModel).then(res => {
+          console.log(res.data)
+          this.scoreForm = res.data.rows[0]
+          console.log(this.myCourseScoreForm)
         });
+        this.searchModel.course_id = '';
+        this.searchModel.student_id = '';
       }
-
       this.dialogFormVisible = true;
     },
     clearValidate(props = []) {
@@ -250,22 +263,45 @@ export default {
       };
       this.$refs.scoreFormRef.clearValidate();
     },
-    saveScore() {
-      this.$refs.scoreFormRef.validate((valid) =>{
-        if (valid) {
-          allScoreAPI.saveScore(this.scoreForm, this.title).then(response => {
-            this.$message({
-              message: response.message,
-              type: 'success'
+    saveScore(){
+      // 先发出警告
+      this.$confirm('此操作将永久修改'+ this.scoreForm.studentName +'的成绩, 是否继续?', '注意', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 先触发表单验证
+        this.$refs.ScoreFormRef.validate((valid) => {
+          if (valid) {
+            // 为后端封装一个 Score 对象
+            let ScoreToBack = {
+              courseId: this.scoreForm.courseId,
+              studentId: this.scoreForm.studentId,
+              score: this.scoreForm.score
+            }
+            // 提交请求给后台
+            allScoreAPI.saveScore(ScoreToBack, this.title).then(response => {
+              // 给出成功提示
+              this.$message({
+                message: response.message,
+                type: 'success',
+              });
+              // 关闭窗口
+              this.dialogFormVisible = false;
+              // 刷新列表
+              this.getScoreList()
             })
-            this.dialogFormVisible = false
-            this.getScoreList();
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消保存'
+        });
+      });
     },
     deleteScore(score) {
       this.$confirm('是否删除该成绩单?', '提示', {
@@ -297,6 +333,12 @@ export default {
 
 <style scoped>
 #search .el-input {
+  width: 125px !important;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+#search .el-select {
   width: 125px !important;
   margin-right: 10px;
   margin-bottom: 5px;
