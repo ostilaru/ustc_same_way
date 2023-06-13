@@ -122,6 +122,14 @@ public class UserController {
         return Result.success("删除用户成功");
     }
 
+    @PostMapping("/register")
+    public Result<?> register(@RequestBody User user){
+        // 密码加密
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.save(user);
+        return Result.success("注册成功");
+    }
+
 
 //    @GetMapping("/{phone}")
 //    public Result<?> getUserByPhone(@PathVariable("phone") String phone){

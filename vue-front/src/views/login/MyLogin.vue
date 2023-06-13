@@ -75,7 +75,7 @@
           </el-form>
           <!-- 按钮盒子 -->
           <div class="btn-box">
-            <button @click.prevent="handleRegister">注册</button>
+            <button @click="handleRegister">注册</button>
             <!-- 绑定点击事件 -->
             <p @click="mySwitch">已有账号?去登录</p>
           </div>
@@ -150,6 +150,8 @@ import { validUsername } from '@/utils/validate'
 import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
 import { ref, onMounted } from '@vue/composition-api'
+
+import userApi from '@/api/userManage'
 
 Vue.use(VueCompositionAPI)
 
@@ -253,6 +255,7 @@ export default {
       })
     },
     handleLogin() {
+      console.log('login')
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -269,12 +272,29 @@ export default {
       })
     },
     handleRegister() {
+      console.log('register')
       this.$refs.registerForm.validate(valid => {
         if (valid) {
+          console.log("valid")
           this.loading = true
-          this.$store.dispatch('user/register', this.RegisterForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+          // 包装一个 user 对象发请求
+          let user = {
+            username: this.RegisterForm.username,
+            password: this.RegisterForm.password,
+            email: 'moren@mail.ustc.edu.cn',
+            phone: '12345678910',
+            status: 1,
+            avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+            deleted: 0
+          }
+          userApi.register(user).then(response => {
             this.loading = false
+            this.$message({
+              message: '注册成功',
+              type: 'success',
+              duration: 3 * 1000
+            })
+            this.mySwitch()
           }).catch(() => {
             this.loading = false
           })
@@ -283,7 +303,8 @@ export default {
           return false
         }
       })
-    }
+    },
+
   }
 }
 </script>

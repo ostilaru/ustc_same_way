@@ -33,11 +33,6 @@
             </template>
         </el-table-column>
         <el-table-column
-          prop="id"
-          label="用户ID"
-          width="100">
-        </el-table-column>
-        <el-table-column
           prop="username"
           label="用户名"
           width="180">
