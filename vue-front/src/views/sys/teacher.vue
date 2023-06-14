@@ -31,7 +31,7 @@
         </el-col>
 
         <el-col :span="2" align="right">
-          <el-button @click="openEditUI(null)" type="primary" icon="el-icon-plus" round>新增</el-button>
+          <el-button @click="openEditUI(null)" type="primary" icon="el-icon-plus" round :disabled="permission">新增</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -85,8 +85,8 @@
           label="在职状态"
           width="150">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status == '在校'" type="success" effect="light">休假</el-tag>
-            <el-tag v-else type="success" effect="light">在职</el-tag>
+            <el-tag v-if="scope.row.status == '0'" type="success" effect="light">在职</el-tag>
+            <el-tag v-else type="danger" effect="light">休假</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -150,8 +150,8 @@
         <el-form-item label="在职状态" :label-width="formLabelWidth">
           <el-switch
             v-model="teacherForm.status"
-            :active-value="'在校'"
-            :inactive-value="'休假'"
+            :active-value="'0'"
+            :inactive-value="'1'"
             active-color="#13ce66"
           >
           </el-switch>
@@ -203,6 +203,7 @@ export default {
       },
       title: '',
       flag: false,
+      permission: '',
       formLabelWidth: '130px',
       dialogFormVisible: false,
       options1: [{
@@ -346,10 +347,21 @@ export default {
         });
       });
     },
+
+    checkPermission() {
+      let currentPermission = this.$store.state.user.name
+      if (currentPermission.startsWith('TE') || currentPermission.startsWith('PB')){
+        this.permission = true
+      } else {
+        this.permission = false
+      }
+    }
+
   },
 
   created() {
     this.getTeacherList()
+    this.checkPermission()
   }
 }
 </script>

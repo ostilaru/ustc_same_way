@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 public class Teacher implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static long serialVersionUID = 1L;
 
     @TableId(value = "teacher_id")
     private String teacherId;
@@ -28,6 +28,22 @@ public class Teacher implements Serializable {
     private String contactPhone;
 
     private String contactMail;
+
+    private String status;
+
+    public Teacher() {
+    }
+
+    public Teacher(long serialVersionUID, String teacherId, String teacherName, String gender, Integer departmentId, String contactPhone, String contactMail, String status) {
+        this.serialVersionUID = serialVersionUID;
+        this.teacherId = teacherId;
+        this.teacherName = teacherName;
+        this.gender = gender;
+        this.departmentId = departmentId;
+        this.contactPhone = contactPhone;
+        this.contactMail = contactMail;
+        this.status = status;
+    }
 
     public String getTeacherId() {
         return teacherId;
@@ -87,5 +103,21 @@ public class Teacher implements Serializable {
             ", contactPhone = " + contactPhone +
             ", contactMail = " + contactMail +
         "}";
+    }
+
+    /**
+     * 获取
+     * @return status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * 设置
+     * @param status
+     */
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

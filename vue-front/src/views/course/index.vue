@@ -25,7 +25,7 @@
         </el-col>
 
         <el-col :span="2" align="right">
-          <el-button @click="openEditUI(null)" type="primary" icon="el-icon-plus" round>新增</el-button>
+          <el-button @click="openEditUI(null)" type="primary" icon="el-icon-plus" round :hidden="permission" :disabled="permission">新增</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -180,6 +180,7 @@ export default {
       },
       title: '',
       flag: false,
+      permission: '',
       formLabelWidth:'130px',
       dialogFormVisible: false,
       options2: [{
@@ -237,10 +238,10 @@ export default {
       })
     },
     openEditUI(course_id) {
-      if(course_id == null){
+      if (course_id == null) {
         this.flag = false;
         this.title = "新增课程";
-      }else{
+      } else {
         this.flag = true;
         this.title = "修改课程";
         // console.log(student_id);
@@ -275,7 +276,7 @@ export default {
       this.$refs.courseFormRef.clearValidate();
     },
 
-    saveCourse(){
+    saveCourse() {
       // 先触发表单验证
       this.$refs.courseFormRef.validate((valid) => {
         if (valid) {
@@ -317,13 +318,21 @@ export default {
         });
       });
     },
-
+    checkPermission() {
+      let currentPermission = this.$store.state.user.name
+      if (currentPermission.startsWith('PB')) {
+        this.permission = true
+      } else {
+        this.permission = false
+      }
+    }
   },
-
 
   created() {
     this.getCourseList()
-  }
+    this.checkPermission()
+  },
+
 
 }
 </script>

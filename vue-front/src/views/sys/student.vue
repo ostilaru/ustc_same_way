@@ -161,7 +161,7 @@
         </el-form-item>
         <el-form-item label="注册时间" prop="enrollmentDate" :label-width="formLabelWidth">
           <el-date-picker
-            v-model="studentForm.graduationDate"
+            v-model="studentForm.enrollmentDate"
             type="date"
             placeholder="选择日期"
             :disabled="flag"
