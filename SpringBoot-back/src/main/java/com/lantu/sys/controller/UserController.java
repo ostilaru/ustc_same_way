@@ -6,11 +6,15 @@ import com.lantu.common.vo.Result;
 import com.lantu.sys.entity.User;
 import com.lantu.sys.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +133,39 @@ public class UserController {
         userService.save(user);
         return Result.success("注册成功");
     }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            // 检查文件是否为空
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("上传文件不能为空");
+            }
+
+            // 获取文件名
+            String fileName = file.getOriginalFilename();
+            System.out.println("图片名：" + fileName);
+
+            // 获取文件的二进制数据
+            byte[] fileData = file.getBytes();
+            System.out.println("图片大小：" + fileData.length + "字节");
+
+            // 保存文件
+            // 保存文件到服务器的本地文件系统
+            String filePath = "/Users/jianglei/somebook_and_course/team/ustc_same_way/SpringBoot-back/src/main/resources/imgs/" + fileName;
+            File destFile = new File(filePath);
+            file.transferTo(destFile);
+
+
+            return ResponseEntity.ok("文件上传成功");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("文件上传失败");
+        }
+    }
+
+
+
+
 
 
 //    @GetMapping("/{phone}")
