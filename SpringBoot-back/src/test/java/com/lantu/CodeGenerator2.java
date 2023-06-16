@@ -15,7 +15,7 @@ public class CodeGenerator2 {
         String password = "jl20020426";
         String moduleName = "sys";
         String mapperLocation = "/Users/jianglei/somebook_and_course/team/ustc_same_way/SpringBoot-back/src/main/resources/mapper/" + moduleName;
-        String tables = "Class,Course,CourseSelection,CourseTeaching,Department,PhysicalExam,Score,Student,Teacher";
+        String tables = "User_File";
 
         FastAutoGenerator.create(url, username, password)
                 .globalConfig(builder -> {

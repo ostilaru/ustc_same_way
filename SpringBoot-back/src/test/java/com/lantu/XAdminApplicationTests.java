@@ -126,10 +126,10 @@ class XAdminApplicationTests {
         studentCourses.forEach(System.out::println);
     }
 
-    @Test
-    void testScoreList(){
-        List<ScoreForAll> scoreForAlls = scoreMapper.getScoreList(null, null,null, null,null, "计算机学院", "68");
-        scoreForAlls.forEach(System.out::println);
-    }
+//    @Test
+//    void testScoreList(){
+//        List<ScoreForAll> scoreForAlls = scoreMapper.getScoreList(null, null,null, null,null, "计算机学院", "68");
+//        scoreForAlls.forEach(System.out::println);
+//    }
 
 }

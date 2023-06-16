@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import axios from "axios";
 
 export default {
   getUserList(searchModel){
@@ -61,6 +62,14 @@ export default {
       data: user
     });
   },
+
+  getFileList() {
+    return request({
+      url: '/userFile/list',
+      method: 'get'
+    });
+  },
+
 
 
 }
